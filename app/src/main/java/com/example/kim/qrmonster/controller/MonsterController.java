@@ -4,13 +4,15 @@ package com.example.kim.qrmonster.controller;
  * Created by kim on 2015-07-29.
  */
 
+import android.graphics.Bitmap;
+
 import com.example.kim.qrmonster.units.Monster;
 import com.example.kim.qrmonster.storage.MonsterStorage;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class MonsterController {
     private static MonsterController instance = null;
-    private static int monsterCount = 0;
     private static MonsterStorage mMonsterStorage = null;
 
     public MonsterController() {
@@ -37,6 +39,24 @@ public class MonsterController {
         return mMonsterStorage.getMonster(name);
     }
 
+    public LinkedList<Monster> getMonsterList() {
+        return mMonsterStorage.getMonsterList();
+    }
+
+    public boolean addMonster(Monster monster){
+        return mMonsterStorage.addMonster(monster);
+    }
+
+    public boolean removeMonster(int key) {
+        return mMonsterStorage.removeMonster(key);
+    }
+
+    public boolean updateMonster(int key, Monster after) {
+        return mMonsterStorage.updateMonster(key, after);
+    }
 
 
+    public int getNextKey() {
+        return mMonsterStorage.getMonsterNumber();
+    }
 }
