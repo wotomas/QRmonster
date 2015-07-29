@@ -31,9 +31,12 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:id="@+id/imageView"
-                    android:background="@android:color/background_dark"
                     android:src="@drawable/ic_launcher"
-                    android:layout_margin="6dp" />
+                    android:layout_margin="6dp"
+                    android:adjustViewBounds="true"
+                    android:minWidth="100dp"
+                    android:minHeight="100dp"
+                    android:contentDescription="Monster Picture" />
 
                 <LinearLayout
                     android:orientation="vertical"

@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.kim.qrmonster.R;
+import com.example.kim.qrmonster.controller.MonsterController;
+import com.example.kim.qrmonster.storage.MonsterStorage;
 
 
 public class Main extends ActionBarActivity implements ActionBar.TabListener {
@@ -39,6 +41,8 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        MonsterController.getInstance().initMonsterStorage(new MonsterStorage());
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 

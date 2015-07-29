@@ -66,7 +66,7 @@ public class QRscan extends ActionBarActivity {
                 String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
                         //Log.i("xZing", "contents: " + contents + " format: " + format); // Handle successful scan
                 Intent resultIntent = new Intent(this, QRscanResult.class);
-                resultIntent.putExtra(SCAN_RESULT," format: " + format + "contents: " + contents );
+                resultIntent.putExtra(SCAN_RESULT, contents );
                 startActivity(resultIntent);
 
             }

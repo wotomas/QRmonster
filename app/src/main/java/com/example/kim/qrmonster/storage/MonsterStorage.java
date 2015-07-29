@@ -36,19 +36,13 @@ public class MonsterStorage {
         return null;
     }
 
-    //add monster to list
-    public boolean addMonster(int key, Bitmap image, String name, int attack, int defence, int health) {
-        if (!isDuplicate(key)) {
-            //Initialize Monster
-            Monster monster = new Monster();
-            monster.set_attack(attack);
-            monster.set_defence(defence);
-            monster.set_health(health);
-            monster.set_image(image);
-            monster.set_key(key);
-            monster.set_name(name);
+    public int getMonsterNumber() {
+        return monsterNumber;
+    }
 
-            //add monster to the list
+    //add monster to list
+    public boolean addMonster(Monster monster) {
+        if (!isDuplicate(monster.get_key())) {
             monsterList.add(monster);
             monsterNumber++;
             return true;
