@@ -28,6 +28,15 @@ public class Monster {
         _health = 0;
     }
 
+    public Monster(String name) {
+        _key = 0;
+        _image = null;
+        _name = name;
+        _attack = 0;
+        _defence = 0;
+        _health = 0;
+    }
+
     public int get_key() {
         return _key;
     }
@@ -76,4 +85,15 @@ public class Monster {
         this._health = _health;
     }
 
+    @Override
+    public String toString() {
+        return "Monster{" +
+                "_key=" + _key +
+                ", _image=" + _image +
+                ", _name='" + _name + '\'' +
+                ", _attack=" + _attack +
+                ", _defence=" + _defence +
+                ", _health=" + _health +
+                '}';
+    }
 }
