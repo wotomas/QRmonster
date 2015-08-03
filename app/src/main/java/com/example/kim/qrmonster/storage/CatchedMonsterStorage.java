@@ -1,26 +1,19 @@
 package com.example.kim.qrmonster.storage;
 
-/**
- * Created by kim on 2015-07-29.
- */
-
-import android.graphics.Bitmap;
-
 import com.example.kim.qrmonster.units.Monster;
-import com.example.kim.qrmonster.controller.MonsterController;
 
 import java.util.LinkedList;
 
-//A monster has
-//      KEY     IMG       NAME      ATT    DEF     HLTH    PACE
-//ex)   1      1.png      troll     17     12      120      60
-public class MonsterStorage {
+/**
+ * Created by kim on 2015-07-31.
+ */
+public class CatchedMonsterStorage {
     private LinkedList<Monster> monsterList;
     private int monsterNumber = 0;
 
 
     //initialize storage
-    public MonsterStorage()
+    public CatchedMonsterStorage()
     {
         monsterList = new LinkedList<Monster>();
     }
