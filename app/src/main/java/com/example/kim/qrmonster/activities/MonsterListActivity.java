@@ -1,5 +1,6 @@
 package com.example.kim.qrmonster.activities;
 
+import android.app.ListActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -7,8 +8,7 @@ import android.view.MenuItem;
 
 import com.example.kim.qrmonster.R;
 
-
-public class MonsterList extends ActionBarActivity {
+public class MonsterListActivity extends ListActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
