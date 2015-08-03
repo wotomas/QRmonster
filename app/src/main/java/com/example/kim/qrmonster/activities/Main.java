@@ -1,7 +1,11 @@
 package com.example.kim.qrmonster.activities;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -11,15 +15,25 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.kim.qrmonster.R;
+import com.example.kim.qrmonster.controller.CatchedMonsterController;
 import com.example.kim.qrmonster.controller.MonsterController;
+import com.example.kim.qrmonster.controller.QRcodeController;
+import com.example.kim.qrmonster.storage.CatchedMonsterStorage;
 import com.example.kim.qrmonster.storage.MonsterStorage;
+import com.example.kim.qrmonster.storage.QRcodeStorage;
+import com.example.kim.qrmonster.units.Monster;
+
 
 
 public class Main extends ActionBarActivity implements ActionBar.TabListener {
@@ -33,6 +47,11 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     SectionsPagerAdapter mSectionsPagerAdapter;
+    final static int requestCode = 0;
+    private static LinkedList<Monster> catchedList = new LinkedList<Monster>();
+    private static MonsterStorage monsterStorage = new MonsterStorage();
+    private static QRcodeStorage QRstorage = new QRcodeStorage();
+    private static CatchedMonsterStorage catchedMonsterStorage = new CatchedMonsterStorage();
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -41,11 +60,11 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        MonsterController.getInstance().initMonsterStorage(new MonsterStorage());
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-
+        MonsterController.getInstance().initMonsterStorage(monsterStorage);
+        QRcodeController.getInstance().initQRcodeStorage(QRstorage);
+        CatchedMonsterController.getInstance().initMonsterStorage(catchedMonsterStorage);
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -84,8 +103,24 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
     public void scanOnClick(View view) {
         //open QR scan activity
         Intent intent = new Intent(this, QRscan.class);
-        startActivity(intent);
+        //startActivity(intent);
+        startActivityForResult(intent, requestCode);
     }
+
+    protected void onActivityResult(int request, int result, Intent data) {
+        Log.i("main/onActivityResult", "request: " + request + " result: " + result);
+        switch(request) {
+            case requestCode:
+                if(result == RESULT_OK) {
+                    //recreate fragment
+                    //View view = getCurrentFocus();
+                    finish();
+                    startActivity(getIntent());
+                }
+                break;
+            }
+    }
+
 
 
     @Override
@@ -161,6 +196,7 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
             }
             return null;
         }
+
     }
 
     /**
@@ -200,17 +236,46 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
                                  Bundle savedInstanceState) {
            if(mPage == 1) {
                View rootView = inflater.inflate(R.layout.activity_explore, container, false);
+
+               catchedList = CatchedMonsterController.getInstance().getMonsterList();
+               for(Monster monster: catchedList) {
+                       TextView hp = (TextView) rootView.findViewById(R.id.monster_hp);
+                       TextView name = (TextView) rootView.findViewById(R.id.monster_name);
+                       TextView att = (TextView) rootView.findViewById(R.id.monster_attack);
+                       TextView def = (TextView) rootView.findViewById(R.id.monster_defence);
+
+                       hp.setText("HP: " + Integer.toString(monster.get_health()));
+                       name.setText(monster.get_name());
+                       att.setText("Attack: " + Integer.toString(monster.get_attack()));
+                       def.setText("Defence: " + Integer.toString(monster.get_defence()));
+               }
+
+
                //TextView text = (TextView) rootView.findViewById(R.id.monster_list);
                //text.setText("Fragment #: " + mPage);
                return rootView;
 
            } else if(mPage == 2) {
                View rootView = inflater.inflate(R.layout.activity_monster_list, container, false);
-               //TextView text = (TextView) rootView.findViewById(R.id.qr_scan);
-               //text.setText("Fragment #: " + mPage);
-               return rootView;
+               ArrayList<String> array = new ArrayList<String>();
+               catchedList = CatchedMonsterController.getInstance().getMonsterList();
+               for(Monster monster: catchedList) {
+                   array.add(monster.toString());
+               }
 
-           } else if(mPage == 2) {
+               ArrayAdapter<String> adapter;
+               adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_list_item_1, array);
+
+               ListView list = (ListView)rootView.findViewById(R.id.list);
+               list.setAdapter(adapter);
+
+
+                // //TextView text = (TextView) rootView.findViewById(R.id.qr_scan);
+               //Log.i("Main/onCreateView", rootView.getClass().toString());
+                //text.setText("Fragment #: " + mPage);
+                return rootView;
+
+           } else if(mPage == 3) {
                View rootView = inflater.inflate(R.layout.activity_nfcbattle, container, false);
                //TextView text = (TextView) rootView.findViewById(R.id.monster_list);
                //text.setText("Fragment #: " + mPage);

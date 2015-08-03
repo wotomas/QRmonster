@@ -16,7 +16,7 @@ public class QRscan extends ActionBarActivity {
 
     private TextView formatTxt, contentTxt;
     public final static String SCAN_RESULT = "com.example.kim.qrmonster.activities.QRscan";
-
+    private static final int QRscanResultCode = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +67,21 @@ public class QRscan extends ActionBarActivity {
                         //Log.i("xZing", "contents: " + contents + " format: " + format); // Handle successful scan
                 Intent resultIntent = new Intent(this, QRscanResult.class);
                 resultIntent.putExtra(SCAN_RESULT, contents );
-                startActivity(resultIntent);
+                startActivityForResult(resultIntent, QRscanResultCode);
 
             }
             else if(resultCode == RESULT_CANCELED){ // Handle cancel
                 Log.i("xZing", "Cancelled");
+            }
+        } else if(requestCode == QRscanResultCode) {
+            if(resultCode == RESULT_OK) {
+                Intent mainIntent = new Intent();
+                setResult(RESULT_OK, mainIntent);
+                finish();
+            } else if(resultCode == RESULT_CANCELED) {
+                Log.i("QRscan", "Ran away from monster");
+                setResult(RESULT_CANCELED);
+                finish();
             }
         }
     }

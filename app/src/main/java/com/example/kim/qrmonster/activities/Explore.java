@@ -4,12 +4,16 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.example.kim.qrmonster.R;
+import com.example.kim.qrmonster.controller.CatchedMonsterController;
+import com.example.kim.qrmonster.units.Monster;
+
+import java.util.LinkedList;
 
 
 public class Explore extends ActionBarActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
