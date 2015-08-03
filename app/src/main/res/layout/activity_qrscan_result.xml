@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="A New Monster was Found"
-        android:id="@+id/textView5"
+        android:id="@+id/title_text"
         android:padding="10dp"
         android:textStyle="bold"
         android:gravity="center"
@@ -66,7 +66,8 @@
                     android:background="#ff484cff"
                     android:layout_margin="10dp"
                     android:paddingLeft="20dp"
-                    android:paddingRight="20dp" />
+                    android:paddingRight="20dp"
+                    android:onClick="catchMonster"/>
 
                 <Button
                     android:layout_width="wrap_content"
@@ -74,7 +75,8 @@
                     android:text="Run"
                     android:id="@+id/runButton"
                     android:background="#ffff675d"
-                    android:layout_margin="10dp" />
+                    android:layout_margin="10dp"
+                    android:onClick="runFromMonster" />
             </LinearLayout>
         </LinearLayout>
 
