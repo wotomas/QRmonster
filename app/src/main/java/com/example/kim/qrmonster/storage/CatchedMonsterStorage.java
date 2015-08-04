@@ -1,13 +1,18 @@
 package com.example.kim.qrmonster.storage;
 
+import android.content.Context;
+
+import com.example.kim.qrmonster.storage.disk.FileManager;
+import com.example.kim.qrmonster.storage.disk.JsonStorable;
 import com.example.kim.qrmonster.units.Monster;
+import com.google.gson.Gson;
 
 import java.util.LinkedList;
 
 /**
  * Created by kim on 2015-07-31.
  */
-public class CatchedMonsterStorage {
+public class CatchedMonsterStorage implements JsonStorable {
     private LinkedList<Monster> monsterList;
     private int monsterNumber = 0;
 
@@ -34,22 +39,24 @@ public class CatchedMonsterStorage {
     }
 
     //add monster to list
-    public boolean addMonster(Monster monster) {
+    public boolean addMonster(Monster monster, Context context) {
         if (!isDuplicate(monster.get_key())) {
             monsterList.add(monster);
             monsterNumber++;
+            saveToJson(context);
             return true;
         }
         return false;
     }
 
     //remove monster from list
-    public boolean removeMonster(int key) {
+    public boolean removeMonster(int key, Context context) {
         if(isDuplicate(key)) {
             for(Monster monster: monsterList) {
                 if( monster.get_key() == key) {
                     if(monsterList.remove(monster)) {
                         monsterNumber--;
+                        saveToJson(context);
                         return true;
                     }
                 }
@@ -60,7 +67,7 @@ public class CatchedMonsterStorage {
     }
 
     //Update monster from list
-    public boolean updateMonster(int key, Monster after) {
+    public boolean updateMonster(int key, Monster after, Context context) {
         if(isDuplicate(key)) {
             for(Monster monster: monsterList){
                 if(monster.get_key() == key){
@@ -70,6 +77,7 @@ public class CatchedMonsterStorage {
                     monster.set_health(after.get_health());
                     monster.set_attack(after.get_attack());
                     monster.set_defence(after.get_defence());
+                    saveToJson(context);
                     return true;
                 }
             }
@@ -91,5 +99,25 @@ public class CatchedMonsterStorage {
             }
         }
         return false;
+    }
+
+    //Disk Storage
+    public String getFileName() {
+        return "CATCHED_MONSTER.txt";
+    }
+
+    @Override
+    public Object loadFromJson(Context context){
+        System.out.println("MonsterStorage/loadFromJson Saving To Disk at " + context.getFilesDir().toString());
+        Gson gson = new Gson();
+        String json = FileManager.getInstance().loadFromFile(getFileName(), context);
+        if (json.equals("")) return null;
+        return gson.fromJson(json, CatchedMonsterStorage.class);
+    }
+
+    @Override
+    public void saveToJson(Context context) {
+        Gson gson = new Gson();
+        FileManager.getInstance().writeToFile(gson.toJson(this), getFileName(), context);
     }
 }

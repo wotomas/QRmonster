@@ -1,7 +1,11 @@
 package com.example.kim.qrmonster.controller;
 
+import android.content.Context;
+
+import com.example.kim.qrmonster.activities.Main;
 import com.example.kim.qrmonster.storage.CatchedMonsterStorage;
 import com.example.kim.qrmonster.storage.MonsterStorage;
+import com.example.kim.qrmonster.storage.disk.JsonStorable;
 import com.example.kim.qrmonster.units.Monster;
 
 import java.util.LinkedList;
@@ -25,9 +29,15 @@ public class CatchedMonsterController {
     }
 
     //Initiate monster storage
-    public boolean initMonsterStorage(CatchedMonsterStorage catchedMonsterStorage) {
+    public boolean initMonsterStorage(CatchedMonsterStorage catchedMonsterStorage, Context context) {
         if(mMonsterStorage == null) {
             mMonsterStorage = catchedMonsterStorage;
+            if(mMonsterStorage instanceof JsonStorable) {
+                mMonsterStorage = (CatchedMonsterStorage) (((JsonStorable) mMonsterStorage).loadFromJson(context));
+                if(mMonsterStorage == null) {
+                    mMonsterStorage = catchedMonsterStorage;
+                }
+            }
             return true;
         }
         return false;
@@ -41,19 +51,19 @@ public class CatchedMonsterController {
         return mMonsterStorage.getMonsterList();
     }
 
-    public boolean addMonster(Monster monster){
+    public boolean addMonster(Monster monster,  Context context){
         if(Math.random() < 0.7) {
-            return mMonsterStorage.addMonster(monster);
+            return mMonsterStorage.addMonster(monster, context);
         }
         return false;
     }
 
-    public boolean removeMonster(int key) {
-        return mMonsterStorage.removeMonster(key);
+    public boolean removeMonster(int key,  Context context) {
+        return mMonsterStorage.removeMonster(key, context);
     }
 
-    public boolean updateMonster(int key, Monster after) {
-        return mMonsterStorage.updateMonster(key, after);
+    public boolean updateMonster(int key, Monster after,  Context context) {
+        return mMonsterStorage.updateMonster(key, after, context);
     }
 
 

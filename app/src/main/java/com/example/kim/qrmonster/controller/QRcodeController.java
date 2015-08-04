@@ -1,6 +1,9 @@
 package com.example.kim.qrmonster.controller;
 
+import android.content.Context;
+
 import com.example.kim.qrmonster.storage.QRcodeStorage;
+import com.example.kim.qrmonster.storage.disk.JsonStorable;
 import com.example.kim.qrmonster.units.QRcode;
 import java.util.LinkedList;
 
@@ -23,9 +26,15 @@ public class QRcodeController {
     }
 
     //Initiate monster storage
-    public boolean initQRcodeStorage(QRcodeStorage qrcodeStorage) {
+    public boolean initQRcodeStorage(QRcodeStorage qrcodeStorage, Context context) {
         if(mQRcodeStorage == null) {
             mQRcodeStorage = qrcodeStorage;
+            if(mQRcodeStorage instanceof JsonStorable) {
+                mQRcodeStorage = (QRcodeStorage) ( ((JsonStorable)mQRcodeStorage).loadFromJson(context));
+                if(mQRcodeStorage == null) {
+                    mQRcodeStorage = qrcodeStorage;
+                }
+            }
             return true;
         }
         return false;
@@ -42,18 +51,18 @@ public class QRcodeController {
     }
 
     //add QRcode to storage
-    public boolean addQRcode(QRcode QR) {
-        return mQRcodeStorage.addQRcode(QR);
+    public boolean addQRcode(QRcode QR, Context context) {
+        return mQRcodeStorage.addQRcode(QR, context);
     }
 
     //remove QRcode from Storage
-    public boolean removeQRcode(int key) {
-        return mQRcodeStorage.removeQRcode(key);
+    public boolean removeQRcode(int key, Context context) {
+        return mQRcodeStorage.removeQRcode(key, context);
     }
 
     //update QRcode from Storage
-    public boolean updateQRcode(int key, QRcode after) {
-        return mQRcodeStorage.updateQRcode(key, after);
+    public boolean updateQRcode(int key, QRcode after, Context context) {
+        return mQRcodeStorage.updateQRcode(key, after, context);
     }
 
     public int getNextKey() {

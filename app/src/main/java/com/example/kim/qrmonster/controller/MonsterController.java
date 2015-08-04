@@ -4,8 +4,11 @@ package com.example.kim.qrmonster.controller;
  * Created by kim on 2015-07-29.
  */
 
+import android.content.Context;
 import android.graphics.Bitmap;
 
+import com.example.kim.qrmonster.storage.QRcodeStorage;
+import com.example.kim.qrmonster.storage.disk.JsonStorable;
 import com.example.kim.qrmonster.units.Monster;
 import com.example.kim.qrmonster.storage.MonsterStorage;
 import java.util.ArrayList;
@@ -27,9 +30,15 @@ public class MonsterController {
     }
 
     //Initiate monster storage
-    public boolean initMonsterStorage(MonsterStorage monsterStorage) {
+    public boolean initMonsterStorage(MonsterStorage monsterStorage, Context context) {
         if(mMonsterStorage == null) {
             mMonsterStorage = monsterStorage;
+            if(mMonsterStorage instanceof JsonStorable) {
+                mMonsterStorage = (MonsterStorage) ((JsonStorable)mMonsterStorage).loadFromJson(context);
+                if(mMonsterStorage == null) {
+                    mMonsterStorage = monsterStorage;
+                }
+            }
             return true;
         }
         return false;
@@ -80,16 +89,16 @@ public class MonsterController {
         return mMonsterStorage.getMonsterList();
     }
 
-    public boolean addMonster(Monster monster){
-        return mMonsterStorage.addMonster(monster);
+    public boolean addMonster(Monster monster, Context context){
+        return mMonsterStorage.addMonster(monster, context);
     }
 
-    public boolean removeMonster(int key) {
-        return mMonsterStorage.removeMonster(key);
+    public boolean removeMonster(int key, Context context) {
+        return mMonsterStorage.removeMonster(key, context);
     }
 
-    public boolean updateMonster(int key, Monster after) {
-        return mMonsterStorage.updateMonster(key, after);
+    public boolean updateMonster(int key, Monster after, Context context) {
+        return mMonsterStorage.updateMonster(key, after, context);
     }
 
 
