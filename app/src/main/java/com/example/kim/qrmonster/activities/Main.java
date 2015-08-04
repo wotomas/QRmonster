@@ -16,6 +16,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -62,12 +63,15 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-        MonsterController.getInstance().initMonsterStorage(monsterStorage);
-        QRcodeController.getInstance().initQRcodeStorage(QRstorage);
-        CatchedMonsterController.getInstance().initMonsterStorage(catchedMonsterStorage);
+        MonsterController.getInstance().initMonsterStorage(monsterStorage, this);
+        QRcodeController.getInstance().initQRcodeStorage(QRstorage, this);
+        CatchedMonsterController.getInstance().initMonsterStorage(catchedMonsterStorage, this);
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.layout_abs);
+
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.

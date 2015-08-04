@@ -39,7 +39,7 @@ public class QRscanResult extends ActionBarActivity {
         qr.set_content(contents);
         qr.set_monsterKey(MonsterController.getInstance().getNextKey());
 
-        if(QRcodeController.getInstance().addQRcode(qr)){
+        if(QRcodeController.getInstance().addQRcode(qr, this)){
             meetMonster(contents);
         } else {
             //duplicate QR code so output message!
@@ -62,7 +62,7 @@ public class QRscanResult extends ActionBarActivity {
         monster = MonsterController.getInstance().createRandomMonster(contents);
 
 
-        if(MonsterController.getInstance().addMonster(monster)) {
+        if(MonsterController.getInstance().addMonster(monster, this)) {
             TextView text = (TextView) findViewById(R.id.qrscan_result);
             text.setTextSize(30);
             text.setText(MonsterController.getInstance().getMonster(monster.get_name()).get_name());
@@ -75,7 +75,7 @@ public class QRscanResult extends ActionBarActivity {
     }
 
     public void catchMonster(View view) {
-        if(CatchedMonsterController.getInstance().addMonster(monster)) {
+        if(CatchedMonsterController.getInstance().addMonster(monster, this)) {
             final LinearLayout linear = (LinearLayout) View.inflate(this, R.layout.monster_name_alert, null);
 
             new AlertDialog.Builder(this)
@@ -98,7 +98,7 @@ public class QRscanResult extends ActionBarActivity {
                             Monster newMonster = new Monster();
                             newMonster = monster;
                             newMonster.set_name(newName.getText().toString());
-                            CatchedMonsterController.getInstance().updateMonster(monster.get_key(), newMonster);
+                            CatchedMonsterController.getInstance().updateMonster(monster.get_key(), newMonster, getBaseContext());
                             Log.i("catchMonster", "Catch Monster!");
                             //setContentView(R.layout.activity_main2);
                             Intent intent = new Intent();

@@ -31,10 +31,6 @@
             android:label="@string/title_activity_qrscan_result" >
         </activity>
         <activity
-            android:name=".activities.MonsterList"
-            android:label="@string/title_activity_monster_list" >
-        </activity>
-        <activity
             android:name=".activities.Main"
             android:label="@string/title_activity_main" >
             <intent-filter>
