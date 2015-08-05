@@ -27,14 +27,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.kim.qrmonster.R;
+import com.example.kim.qrmonster.adapter.MonsterAdapter;
 import com.example.kim.qrmonster.controller.CatchedMonsterController;
 import com.example.kim.qrmonster.controller.MonsterController;
 import com.example.kim.qrmonster.controller.QRcodeController;
 import com.example.kim.qrmonster.storage.CatchedMonsterStorage;
 import com.example.kim.qrmonster.storage.MonsterStorage;
 import com.example.kim.qrmonster.storage.QRcodeStorage;
+import com.example.kim.qrmonster.storage.disk.FileManager;
 import com.example.kim.qrmonster.units.Monster;
-
+import com.example.kim.qrmonster.units.QRcode;
 
 
 public class Main extends ActionBarActivity implements ActionBar.TabListener {
@@ -63,9 +65,24 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+        //************************************
+        //** empty the list for debugging
+        //***********************************
+        //FileManager.getInstance().deleteAllFile(this);
+        //************************************
+        //** end
+        //***********************************
         MonsterController.getInstance().initMonsterStorage(monsterStorage, this);
         QRcodeController.getInstance().initQRcodeStorage(QRstorage, this);
         CatchedMonsterController.getInstance().initMonsterStorage(catchedMonsterStorage, this);
+
+
+
+
+
+
+
+
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -261,14 +278,14 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
 
            } else if(mPage == 2) {
                View rootView = inflater.inflate(R.layout.activity_monster_list, container, false);
-               ArrayList<String> array = new ArrayList<String>();
+               ArrayList<Monster> array = new ArrayList<Monster>();
                catchedList = CatchedMonsterController.getInstance().getMonsterList();
                for(Monster monster: catchedList) {
-                   array.add(monster.toString());
+                   array.add(monster);
                }
 
-               ArrayAdapter<String> adapter;
-               adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_list_item_1, array);
+               MonsterAdapter adapter;
+               adapter = new MonsterAdapter(this.getActivity(), R.layout.custom_row_monster, array);
 
                ListView list = (ListView)rootView.findViewById(R.id.list);
                list.setAdapter(adapter);
