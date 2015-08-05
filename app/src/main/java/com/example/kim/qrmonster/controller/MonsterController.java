@@ -51,7 +51,7 @@ public class MonsterController {
         Monster monster = new Monster();
         monster.set_key(MonsterController.getInstance().getNextKey());
         monster.set_name("Random Name " + monster.get_key());
-        monster.set_image(null);
+        monster.set_image(0);
         double lowerBound = 0;
         double higherBound = 0;
         if(length < 15){

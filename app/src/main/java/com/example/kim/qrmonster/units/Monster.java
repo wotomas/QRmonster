@@ -13,7 +13,7 @@ public class Monster {
     //ex)   1      1.png      troll     17     12      120      60
 
     private int _key;
-    private Bitmap _image;
+    private int _image;
     private String _name;
     private int _attack;
     private int _defence;
@@ -21,7 +21,7 @@ public class Monster {
 
     public Monster() {
         _key = 0;
-        _image = null;
+        _image = 0;
         _name = "";
         _attack = 0;
         _defence = 0;
@@ -30,7 +30,7 @@ public class Monster {
 
     public Monster(String name) {
         _key = 0;
-        _image = null;
+        _image = 0;
         _name = name;
         _attack = 0;
         _defence = 0;
@@ -45,11 +45,11 @@ public class Monster {
         this._key = _key;
     }
 
-    public Bitmap get_image() {
+    public int get_image() {
         return _image;
     }
 
-    public void set_image(Bitmap _image) {
+    public void set_image(int _image) {
         this._image = _image;
     }
 
