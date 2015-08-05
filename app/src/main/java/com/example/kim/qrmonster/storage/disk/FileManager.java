@@ -7,6 +7,7 @@ package com.example.kim.qrmonster.storage.disk;
 import android.content.Context;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -23,6 +24,25 @@ public class FileManager {
 
     public static FileManager getInstance(){
         return instance;
+    }
+
+    public void deleteAllFile(Context context) {
+        File dir = context.getFilesDir();
+        File file = new File(dir, "MONSTER.txt");
+        if(file.delete()){
+            System.out.println("FileManager/deleteAllFile Successfully deleted MONSTER.txt");
+        }
+
+        file = new File(dir, "QR_CODE.txt");
+        if(file.delete()){
+            System.out.println("FileManager/deleteAllFile Successfully deleted QR_CODE.txt");
+        }
+
+        file = new File(dir, "CATCHED_MONSTER.txt");
+        if(file.delete()){
+            System.out.println("FileManager/deleteAllFile Successfully deleted CATCHED_MONSTER.txt");
+        }
+
     }
 
     public void writeToFile(String s, String fileName, Context context){
