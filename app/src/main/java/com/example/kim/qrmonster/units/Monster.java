@@ -18,6 +18,7 @@ public class Monster {
     private int _attack;
     private int _defence;
     private int _health;
+    private int _tier;
 
     public Monster() {
         _key = 0;
@@ -26,6 +27,7 @@ public class Monster {
         _attack = 0;
         _defence = 0;
         _health = 0;
+        _tier = 0;
     }
 
     public Monster(String name) {
@@ -35,6 +37,16 @@ public class Monster {
         _attack = 0;
         _defence = 0;
         _health = 0;
+        _tier = 0;
+    }
+
+
+    public int get_tier() {
+        return _tier;
+    }
+
+    public void set_tier(int _tier) {
+        this._tier = _tier;
     }
 
     public int get_key() {
