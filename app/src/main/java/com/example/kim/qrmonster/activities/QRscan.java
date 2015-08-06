@@ -22,8 +22,11 @@ public class QRscan extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrscan);
-        formatTxt = (TextView)findViewById(R.id.scan_format);
-        contentTxt = (TextView)findViewById(R.id.scan_content);
+        //formatTxt = (TextView)findViewById(R.id.scan_format);
+        //contentTxt = (TextView)findViewById(R.id.scan_content);
+        Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+        intent.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "QR_CODE_MODE");
+        startActivityForResult(intent, 0);
     }
 
 
@@ -33,7 +36,7 @@ public class QRscan extends ActionBarActivity {
         getMenuInflater().inflate(R.menu.menu_qrscan, menu);
         return true;
     }
-
+    /**
     public void onScanClick(View view) {
         if(view.getId() == R.id.scan_button){
             //scan
@@ -42,6 +45,7 @@ public class QRscan extends ActionBarActivity {
             startActivityForResult(intent, 0);
         }
     }
+     **/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

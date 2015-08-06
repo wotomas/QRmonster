@@ -3,6 +3,9 @@ package com.example.kim.qrmonster.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -11,10 +14,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.kim.qrmonster.R;
+import com.example.kim.qrmonster.assets.Assets;
+import com.example.kim.qrmonster.assets.MonsterImageView;
 import com.example.kim.qrmonster.controller.CatchedMonsterController;
 import com.example.kim.qrmonster.controller.MonsterController;
 import com.example.kim.qrmonster.controller.QRcodeController;
@@ -27,6 +33,7 @@ import java.util.LinkedList;
 
 public class QRscanResult extends ActionBarActivity {
     private Monster monster;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +67,44 @@ public class QRscanResult extends ActionBarActivity {
         //else
         monster = new Monster();
         monster = MonsterController.getInstance().createRandomMonster(contents);
+
+        MonsterImageView imageView = (MonsterImageView) findViewById(R.id.monster_view);
+        TypedArray array = null;
+        switch (monster.get_tier()){
+            case 1:
+                array = getResources().obtainTypedArray(R.array.tier_one_monster_images);
+                imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_1));
+                array.recycle();
+                break;
+            case 2:
+                array = getResources().obtainTypedArray(R.array.tier_two_monster_images);
+                imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_3));
+                array.recycle();
+                break;
+            case 3:
+                array = getResources().obtainTypedArray(R.array.tier_three_monster_images);
+                imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_10));
+                array.recycle();
+                break;
+            case 4:
+                array = getResources().obtainTypedArray(R.array.tier_four_monster_images);
+                imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_12));
+                array.recycle();
+                break;
+            case 5:
+                array = getResources().obtainTypedArray(R.array.tier_five_monster_images);
+                imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_19));
+                array.recycle();
+                break;
+        }
+
+
+
+
+        //Bitmap bm = BitmapFactory.decodeResource(this.getResources(),imageView.getId() );
+        //monsterImage = new MonsterImage(bm);
+        //imageView.setImageDrawable(monsterImage);
+        //Assets.loadBitmap("monster_1.png", true, this.getBaseContext());
 
 
         if(MonsterController.getInstance().addMonster(monster, this)) {

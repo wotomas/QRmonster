@@ -68,7 +68,7 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
         //************************************
         //** empty the list for debugging
         //***********************************
-        //FileManager.getInstance().deleteAllFile(this);
+        FileManager.getInstance().deleteAllFile(this);
         //************************************
         //** end
         //***********************************
