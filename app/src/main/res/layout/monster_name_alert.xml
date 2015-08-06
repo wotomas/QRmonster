@@ -7,7 +7,7 @@
         android:id="@+id/monster_instruct_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Give a New Name to Your Monster!"
+        android:text="Give a New Name Monster!"
         android:hint="Monster"
         android:gravity="center"
         android:textSize="20dp"
@@ -16,6 +16,8 @@
 
     <EditText
         android:id="@+id/monster_new_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Input Name"
+        android:layout_gravity="center" />
 </LinearLayout>

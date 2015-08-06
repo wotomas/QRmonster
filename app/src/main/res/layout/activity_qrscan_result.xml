@@ -43,14 +43,15 @@
                 android:text="@string/title_activity_qrscan_result"
                 android:id="@+id/qrscan_result" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageView2"
-                android:src="@drawable/ic_launcher"
-                android:minHeight="100dp"
-                android:minWidth="100dp"
-                android:layout_margin="20dp" />
+            <com.example.kim.qrmonster.assets.MonsterImageView
+                android:layout_width="500px"
+                android:layout_height="750px"
+                android:id="@+id/monster_view"
+                android:src="@drawable/monster_1"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_gravity="center"
+                android:scaleType="center" />
 
             <LinearLayout
                 android:orientation="horizontal"

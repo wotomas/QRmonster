@@ -59,4 +59,36 @@
     <item>@string/preferences_front_light_auto</item>
     <item>@string/preferences_front_light_off</item>
   </string-array>
+    <array name="tier_one_monster_images">
+        <item>@drawable/monster_1</item>
+        <item>@drawable/monster_2</item>
+    </array>
+    <array name="tier_two_monster_images">
+        <item>@drawable/monster_3</item>
+        <item>@drawable/monster_4</item>
+        <item>@drawable/monster_5</item>
+        <item>@drawable/monster_6</item>
+    </array>
+    <array name="tier_three_monster_images">
+        <item>@drawable/monster_7</item>
+        <item>@drawable/monster_8</item>
+        <item>@drawable/monster_9</item>
+        <item>@drawable/monster_10</item>
+        <item>@drawable/monster_11</item>
+    </array>
+    <array name="tier_four_monster_images">
+        <item>@drawable/monster_12</item>
+        <item>@drawable/monster_13</item>
+        <item>@drawable/monster_14</item>
+        <item>@drawable/monster_15</item>
+        <item>@drawable/monster_16</item>
+        <item>@drawable/monster_17</item>
+        <item>@drawable/monster_18</item>
+    </array>
+    <array name="tier_five_monster_images">
+        <item>@drawable/monster_19</item>
+        <item>@drawable/monster_20</item>
+        <item>@drawable/monster_21</item>
+        <item>@drawable/monster_22</item>
+    </array>
 </resources>
