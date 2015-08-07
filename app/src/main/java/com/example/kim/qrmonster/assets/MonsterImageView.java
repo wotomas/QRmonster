@@ -27,6 +27,7 @@ import android.widget.ImageView;
 public class MonsterImageView extends ImageView {
 
     private boolean _list = false;
+    private boolean _main = false;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public MonsterImageView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
@@ -65,12 +66,36 @@ public class MonsterImageView extends ImageView {
             Bitmap monsterCropped = getMonsterListCroppedBitmap(bitmap);
             canvas.drawBitmap(monsterCropped, 50, 300 - monsterCropped.getHeight() , null);
             Log.i("MonsterImageView/onDraw", "monsterCropped Image Width and Height: " + monsterCropped.getWidth() + " " + monsterCropped.getHeight());
+        } else if(_main) {
+            Bitmap monsterCropped = getMonsterMainCroppedBitmap(bitmap);
+            canvas.drawBitmap(monsterCropped, 100, 600 - monsterCropped.getHeight() , null);
+            Log.i("MonsterImageView/onDraw", "monsterCropped Image Width and Height: " + monsterCropped.getWidth() + " " + monsterCropped.getHeight());
         } else {
             Bitmap monsterCropped = getMonsterCroppedBitmap(bitmap);
             canvas.drawBitmap(monsterCropped, 0,750 - monsterCropped.getHeight(), null);
             Log.i("MonsterImageView/onDraw", "monsterCropped Image Width and Height: " + monsterCropped.getWidth() + " " + monsterCropped.getHeight());
         }
 
+
+    }
+
+    private Bitmap getMonsterMainCroppedBitmap(Bitmap bitmap) {
+        Bitmap finalBitmap = bitmap;
+        int width = finalBitmap.getWidth();
+        int height = finalBitmap.getHeight();
+
+        Log.i("MonsterImageView/getMonsterMainCroppedBitmap", "Initial Image Width and Height: " + finalBitmap.getWidth() + " " + finalBitmap.getHeight());
+
+        Bitmap croppedImage = Bitmap.createBitmap(finalBitmap, 0, 0, bitmap.getWidth() /4 -4, bitmap.getHeight()/4 -4);
+        Log.i("MonsterImageView/getMonsterMainCroppedBitmap", "Cropped Image Width and Height: " + croppedImage.getWidth() + " " + croppedImage.getHeight());
+
+        Bitmap lastBitmap = Bitmap.createScaledBitmap(croppedImage, 400, 400 * height / width, false);
+        Log.i("MonsterImageView/getMonsterMainCroppedBitmap", "lastBitmap Image Width and Height: " + lastBitmap.getWidth() + " " + lastBitmap.getHeight());
+
+        Canvas canvas = new Canvas(lastBitmap);
+        canvas.drawBitmap(lastBitmap, 0, 0, null);
+
+        return lastBitmap;
     }
 
     private Bitmap getMonsterListCroppedBitmap(Bitmap bitmap) {
@@ -95,6 +120,8 @@ public class MonsterImageView extends ImageView {
     public void listMode(Boolean value) {
         _list = value;
     }
+
+    public void mainMode(Boolean value) { _main = value; }
 
     private Bitmap getMonsterCroppedBitmap(Bitmap bitmap) {
         Bitmap finalBitmap = bitmap;

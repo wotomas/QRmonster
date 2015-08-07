@@ -7,6 +7,7 @@ import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -28,6 +29,7 @@ import android.widget.TextView;
 
 import com.example.kim.qrmonster.R;
 import com.example.kim.qrmonster.adapter.MonsterAdapter;
+import com.example.kim.qrmonster.assets.MonsterImageView;
 import com.example.kim.qrmonster.controller.CatchedMonsterController;
 import com.example.kim.qrmonster.controller.MonsterController;
 import com.example.kim.qrmonster.controller.QRcodeController;
@@ -260,6 +262,38 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
 
                catchedList = CatchedMonsterController.getInstance().getMonsterList();
                for(Monster monster: catchedList) {
+                   if(CatchedMonsterController.getInstance().isKeyMonster(monster)) {
+                       MonsterImageView imageView = (MonsterImageView) rootView.findViewById(R.id.monster_image);
+                       imageView.mainMode(true);
+                       TypedArray array = null;
+                       switch (monster.get_tier()){
+                           case 1:
+                               array = getResources().obtainTypedArray(R.array.tier_one_monster_images);
+                               imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_1));
+                               array.recycle();
+                               break;
+                           case 2:
+                               array = getResources().obtainTypedArray(R.array.tier_two_monster_images);
+                               imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_3));
+                               array.recycle();
+                               break;
+                           case 3:
+                               array = getResources().obtainTypedArray(R.array.tier_three_monster_images);
+                               imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_10));
+                               array.recycle();
+                               break;
+                           case 4:
+                               array = getResources().obtainTypedArray(R.array.tier_four_monster_images);
+                               imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_12));
+                               array.recycle();
+                               break;
+                           case 5:
+                               array = getResources().obtainTypedArray(R.array.tier_five_monster_images);
+                               imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_19));
+                               array.recycle();
+                               break;
+                       }
+
                        TextView hp = (TextView) rootView.findViewById(R.id.monster_hp);
                        TextView name = (TextView) rootView.findViewById(R.id.monster_name);
                        TextView att = (TextView) rootView.findViewById(R.id.monster_attack);
@@ -269,6 +303,7 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
                        name.setText(monster.get_name());
                        att.setText("Attack: " + Integer.toString(monster.get_attack()));
                        def.setText("Defence: " + Integer.toString(monster.get_defence()));
+                   }
                }
 
 
