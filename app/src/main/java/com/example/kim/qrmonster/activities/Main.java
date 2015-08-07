@@ -8,6 +8,7 @@ import java.util.Locale;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.graphics.PorterDuff;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -21,12 +22,16 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.example.kim.qrmonster.R;
 import com.example.kim.qrmonster.adapter.MonsterAdapter;
 import com.example.kim.qrmonster.assets.MonsterImageView;
@@ -70,7 +75,7 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
         //************************************
         //** empty the list for debugging
         //***********************************
-        FileManager.getInstance().deleteAllFile(this);
+        //FileManager.getInstance().deleteAllFile(this);
         //************************************
         //** end
         //***********************************
@@ -96,9 +101,12 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
+
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        //mViewPager.getChildAt(0).setBackgroundResource(R.color.possible_result_points);
+
 
         // When swiping between different sections, select the corresponding
         // tab. We can also use ActionBar.Tab#select() to do this if we have
@@ -110,16 +118,35 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
             }
         });
 
+
         // For each of the sections in the app, add a tab to the action bar.
         for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
             // Create a tab with text corresponding to the page title defined by
             // the adapter. Also specify this Activity object, which implements
             // the TabListener interface, as the callback (listener) for when
             // this tab is selected.
-            actionBar.addTab(
-                    actionBar.newTab()
-                            .setText(mSectionsPagerAdapter.getPageTitle(i))
-                            .setTabListener(this));
+            if(mSectionsPagerAdapter.getPageTitle(i).equals("EXPLORE")) {
+                actionBar.addTab(
+                        actionBar.newTab()
+                                .setIcon(R.drawable.explore)
+                                        //.setText(mSectionsPagerAdapter.getPageTitle(i))
+                                .setTabListener(this));
+            } else if(mSectionsPagerAdapter.getPageTitle(i).equals("LIST")) {
+                actionBar.addTab(
+                        actionBar.newTab()
+                                .setIcon(R.drawable.list)
+                                //.setText(mSectionsPagerAdapter.getPageTitle(i))
+                                .setTabListener(this));
+            } else if(mSectionsPagerAdapter.getPageTitle(i).equals("BATTLE")) {
+                actionBar.addTab(
+                        actionBar.newTab()
+                                .setIcon(R.drawable.battle)
+                                        //.setText(mSectionsPagerAdapter.getPageTitle(i))
+                                .setTabListener(this));
+            }
+
+
+
         }
     }
 
