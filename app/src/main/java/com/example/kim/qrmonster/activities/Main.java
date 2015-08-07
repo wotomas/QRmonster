@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.internal.widget.AdapterViewCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -26,7 +28,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -286,6 +290,23 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
                                  Bundle savedInstanceState) {
            if(mPage == 1) {
                View rootView = inflater.inflate(R.layout.activity_explore, container, false);
+               Button button2 = (Button) rootView.findViewById(R.id.change_monster);
+               Button button3 = (Button) rootView.findViewById(R.id.train_monster);
+
+               Typeface typeface = Typeface.createFromAsset(rootView.getContext().getAssets(), "Dragonfly.ttf");
+               button2.setTypeface(typeface);
+               button3.setTypeface(typeface);
+
+
+               TextView hp = (TextView) rootView.findViewById(R.id.monster_hp);
+               TextView name = (TextView) rootView.findViewById(R.id.monster_name);
+               TextView att = (TextView) rootView.findViewById(R.id.monster_attack);
+               TextView def = (TextView) rootView.findViewById(R.id.monster_defence);
+
+               hp.setTypeface(typeface);
+               name.setTypeface(typeface);
+               att.setTypeface(typeface);
+               def.setTypeface(typeface);
 
                catchedList = CatchedMonsterController.getInstance().getMonsterList();
                for(Monster monster: catchedList) {
@@ -321,11 +342,6 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
                                break;
                        }
 
-                       TextView hp = (TextView) rootView.findViewById(R.id.monster_hp);
-                       TextView name = (TextView) rootView.findViewById(R.id.monster_name);
-                       TextView att = (TextView) rootView.findViewById(R.id.monster_attack);
-                       TextView def = (TextView) rootView.findViewById(R.id.monster_defence);
-
                        hp.setText("HP: " + Integer.toString(monster.get_health()));
                        name.setText(monster.get_name());
                        att.setText("Attack: " + Integer.toString(monster.get_attack()));
@@ -351,7 +367,6 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
 
                ListView list = (ListView)rootView.findViewById(R.id.list);
                list.setAdapter(adapter);
-
 
                 // //TextView text = (TextView) rootView.findViewById(R.id.qr_scan);
                //Log.i("Main/onCreateView", rootView.getClass().toString());
