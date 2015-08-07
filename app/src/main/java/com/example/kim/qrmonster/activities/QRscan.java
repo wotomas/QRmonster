@@ -22,6 +22,12 @@ public class QRscan extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrscan);
+        final android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setCustomView(R.layout.layout_abs);
+
+        getSupportActionBar().setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.layout_abs);
+
         //formatTxt = (TextView)findViewById(R.id.scan_format);
         //contentTxt = (TextView)findViewById(R.id.scan_content);
         Intent intent = new Intent("com.google.zxing.client.android.SCAN");

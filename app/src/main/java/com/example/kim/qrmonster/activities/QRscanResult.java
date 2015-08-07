@@ -1,5 +1,6 @@
 package com.example.kim.qrmonster.activities;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -38,6 +39,13 @@ public class QRscanResult extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrscan_result);
+
+        final android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setCustomView(R.layout.layout_abs);
+
+        getSupportActionBar().setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.layout_abs);
+
         Intent intent = getIntent();
         String contents = intent.getStringExtra(QRscan.SCAN_RESULT);
         //contents = 4294059209454

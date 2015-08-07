@@ -2,11 +2,15 @@ package com.example.kim.qrmonster.adapter;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.kim.qrmonster.R;
@@ -48,8 +52,9 @@ public class MonsterAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final int pos = position;
+
         if (convertView == null) {
             convertView = LayoutInflater.from(_context).inflate(_layout, parent, false);
         }
@@ -86,6 +91,17 @@ public class MonsterAdapter extends BaseAdapter {
                 break;
         }
 
+        final View.OnClickListener makeListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Log.i("MonsterAdapter/makeListener", v.get);
+                Monster monster = new Monster();
+                monster = _arrayList.get(position);
+                Log.i("MonsterAdapter/makeListener Monster Name: ", monster.get_name());
+            }
+        };
+
+        convertView.setOnClickListener(makeListener);
 
         TextView name = (TextView)convertView.findViewById(R.id.list_monster_name);
         name.setText(_arrayList.get(position).get_name());
