@@ -15,7 +15,7 @@ import java.util.LinkedList;
 public class CatchedMonsterStorage implements JsonStorable {
     private LinkedList<Monster> monsterList;
     private int monsterNumber = 0;
-
+    private int keyMonster = 0;
 
     //initialize storage
     public CatchedMonsterStorage()
@@ -23,6 +23,20 @@ public class CatchedMonsterStorage implements JsonStorable {
         monsterList = new LinkedList<Monster>();
     }
 
+
+    //set key monster
+    public void setKeyMonster(int key) {
+        for (Monster monster: monsterList) {
+            if (monster.get_key() == key) {
+                keyMonster = key;
+            }
+        }
+    }
+
+    //get key monster
+    public int getKeyMonster() {
+        return keyMonster;
+    }
 
     //get monster from list
     public Monster getMonster(String name) {
@@ -43,6 +57,9 @@ public class CatchedMonsterStorage implements JsonStorable {
         if (!isDuplicate(monster.get_key())) {
             monsterList.add(monster);
             monsterNumber++;
+            if(monsterNumber == 1) {
+                keyMonster = monster.get_key();
+            }
             saveToJson(context);
             return true;
         }
@@ -90,6 +107,13 @@ public class CatchedMonsterStorage implements JsonStorable {
         return monsterList;
     }
 
+    public boolean isKeyMonster(Monster monster) {
+        if(monster.get_key() == keyMonster) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     //helper functions
     private boolean isDuplicate(int key) {
@@ -120,4 +144,6 @@ public class CatchedMonsterStorage implements JsonStorable {
         Gson gson = new Gson();
         FileManager.getInstance().writeToFile(gson.toJson(this), getFileName(), context);
     }
+
+
 }

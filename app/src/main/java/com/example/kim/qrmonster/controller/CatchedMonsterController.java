@@ -70,4 +70,8 @@ public class CatchedMonsterController {
     public int getNextKey() {
         return mMonsterStorage.getMonsterNumber();
     }
+
+    public boolean isKeyMonster(Monster monster){
+        return mMonsterStorage.isKeyMonster(monster);
+    }
 }

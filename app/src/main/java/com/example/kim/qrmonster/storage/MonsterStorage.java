@@ -23,6 +23,7 @@ public class MonsterStorage implements JsonStorable {
     private int monsterNumber = 0;
 
 
+
     //initialize storage
     public MonsterStorage()
     {
