@@ -75,7 +75,9 @@ public class QRscan extends ActionBarActivity {
 
             }
             else if(resultCode == RESULT_CANCELED){ // Handle cancel
-                Log.i("xZing", "Cancelled");
+                Log.i("QRscan", "REturned Back from scan");
+                setResult(RESULT_CANCELED);
+                finish();
             }
         } else if(requestCode == QRscanResultCode) {
             if(resultCode == RESULT_OK) {
