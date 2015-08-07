@@ -12,7 +12,7 @@
         android:id="@+id/card_view"
         android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         card_view:cardCornerRadius="4dp"
         android:layout_margin="2dp">
 
@@ -26,10 +26,10 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:id="@+id/imageView"
+                <com.example.kim.qrmonster.assets.MonsterImageView
+                    android:layout_width="600px"
+                    android:layout_height="600px"
+                    android:id="@+id/monster_image"
                     android:src="@drawable/ic_launcher"
                     android:layout_margin="6dp"
                     android:adjustViewBounds="true"
@@ -40,7 +40,9 @@
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center"
+                    android:gravity="left|center_vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -53,19 +55,19 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
                         android:text="HP: "
                         android:id="@+id/monster_hp" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
                         android:text="Attack: "
                         android:id="@+id/monster_attack" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
                         android:text="Defence: "
                         android:id="@+id/monster_defence" />
 
@@ -76,7 +78,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center">
 
                 <Button
@@ -85,7 +87,18 @@
                     android:text="Change Monster"
                     android:id="@+id/button2"
                     android:layout_gravity="center"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:layout_marginBottom="10dp" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Training"
+                    android:id="@+id/button3"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:layout_marginLeft="10dp" />
 
             </LinearLayout>
 
