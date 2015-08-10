@@ -74,4 +74,8 @@ public class CatchedMonsterController {
     public boolean isKeyMonster(Monster monster){
         return mMonsterStorage.isKeyMonster(monster);
     }
+
+    public Monster getKeyMonster() {
+        return mMonsterStorage.getMonster(mMonsterStorage.getKeyMonster());
+    }
 }

@@ -125,7 +125,9 @@
                             android:layout_marginBottom="10dp"
                             android:gravity="center"
                             android:layout_marginTop="20dp"
-                            android:background="@drawable/button_layout"/>
+                            android:background="@drawable/button_layout"
+                            android:textColor="#ffffffff"
+                            android:onClick="trainOnClick" />
 
                     </LinearLayout>
 

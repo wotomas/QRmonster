@@ -181,6 +181,10 @@ public class MonsterController {
         return mMonsterStorage.updateMonster(key, after, context);
     }
 
+    public Monster getLastMetMonster() {
+        return mMonsterStorage.getLastMetMonster();
+    }
+
 
     public int getNextKey() {
         return mMonsterStorage.getMonsterNumber();

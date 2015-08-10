@@ -48,6 +48,17 @@ public class CatchedMonsterStorage implements JsonStorable {
         return null;
     }
 
+    //get monster from list by key
+    public Monster getMonster(int key) {
+        for (Monster monster: monsterList) {
+            if (monster.get_key() == key) {
+                return monster;
+            }
+        }
+        return null;
+    }
+
+
     public int getMonsterNumber() {
         return monsterNumber;
     }

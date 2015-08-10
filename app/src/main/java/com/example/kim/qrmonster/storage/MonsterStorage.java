@@ -41,6 +41,10 @@ public class MonsterStorage implements JsonStorable {
         return null;
     }
 
+    public Monster getLastMetMonster() {
+        return monsterList.getLast();
+    }
+
     public int getMonsterNumber() {
         return monsterNumber;
     }

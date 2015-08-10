@@ -2,13 +2,10 @@ package com.example.kim.qrmonster.activities;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Locale;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.TypedArray;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -18,24 +15,17 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.internal.widget.AdapterViewCompat;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.astuetz.PagerSlidingTabStrip;
+import com.example.kim.catchmonster.activities.MainActivity;
 import com.example.kim.qrmonster.R;
 import com.example.kim.qrmonster.adapter.MonsterAdapter;
 import com.example.kim.qrmonster.assets.MonsterImageView;
@@ -47,7 +37,6 @@ import com.example.kim.qrmonster.storage.MonsterStorage;
 import com.example.kim.qrmonster.storage.QRcodeStorage;
 import com.example.kim.qrmonster.storage.disk.FileManager;
 import com.example.kim.qrmonster.units.Monster;
-import com.example.kim.qrmonster.units.QRcode;
 
 
 public class Main extends ActionBarActivity implements ActionBar.TabListener {
@@ -62,6 +51,7 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
      */
     SectionsPagerAdapter mSectionsPagerAdapter;
     final static int requestCode = 0;
+    final static int trainReqeustCode = 1;
     private static LinkedList<Monster> catchedList = new LinkedList<Monster>();
     private static MonsterStorage monsterStorage = new MonsterStorage();
     private static QRcodeStorage QRstorage = new QRcodeStorage();
@@ -76,23 +66,7 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-        //************************************
-        //** empty the list for debugging
-        //***********************************
-        //FileManager.getInstance().deleteAllFile(this);
-        //************************************
-        //** end
-        //***********************************
-        MonsterController.getInstance().initMonsterStorage(monsterStorage, this);
-        QRcodeController.getInstance().initQRcodeStorage(QRstorage, this);
-        CatchedMonsterController.getInstance().initMonsterStorage(catchedMonsterStorage, this);
-
-
-
-
-
-
-
+        initializeControllers(this);
 
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
@@ -100,9 +74,13 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.layout_abs);
 
-
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
+        setAdapter(actionBar);
+
+    }
+
+    private void setAdapter(final ActionBar actionBar) {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
 
@@ -139,7 +117,7 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
                 actionBar.addTab(
                         actionBar.newTab()
                                 .setIcon(R.drawable.list)
-                                //.setText(mSectionsPagerAdapter.getPageTitle(i))
+                                        //.setText(mSectionsPagerAdapter.getPageTitle(i))
                                 .setTabListener(this));
             } else if(mSectionsPagerAdapter.getPageTitle(i).equals("BATTLE")) {
                 actionBar.addTab(
@@ -148,17 +126,33 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
                                         //.setText(mSectionsPagerAdapter.getPageTitle(i))
                                 .setTabListener(this));
             }
-
-
-
         }
     }
+    private void initializeControllers(Main main) {
+        //************************************
+        //** empty the list for debugging
+        //***********************************
+        //FileManager.getInstance().deleteAllFile(main);
+        //************************************
+        //** end
+        //***********************************
+        MonsterController.getInstance().initMonsterStorage(monsterStorage, main);
+        QRcodeController.getInstance().initQRcodeStorage(QRstorage, main);
+        CatchedMonsterController.getInstance().initMonsterStorage(catchedMonsterStorage, main);
+    }
+
 
     public void scanOnClick(View view) {
         //open QR scan activity
         Intent intent = new Intent(this, QRscan.class);
         //startActivity(intent);
         startActivityForResult(intent, requestCode);
+    }
+    public void trainOnClick(View view) {
+        //open QR scan activity
+        Intent intent = new Intent(this, MainActivity.class);
+        //startActivity(intent);
+        startActivityForResult(intent, trainReqeustCode);
     }
 
     protected void onActivityResult(int request, int result, Intent data) {
@@ -172,6 +166,10 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
                     startActivity(getIntent());
                 }
                 break;
+            case trainReqeustCode:
+                if(result == 99) {
+                    //Log.i("main/onActivityResult", "request: " + request + " result: " + result);
+                }
             }
     }
 
@@ -290,88 +288,12 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
                                  Bundle savedInstanceState) {
            if(mPage == 1) {
                View rootView = inflater.inflate(R.layout.activity_explore, container, false);
-               Button button2 = (Button) rootView.findViewById(R.id.change_monster);
-               Button button3 = (Button) rootView.findViewById(R.id.train_monster);
+               return getExploreView(rootView);
 
-               Typeface typeface = Typeface.createFromAsset(rootView.getContext().getAssets(), "Dragonfly.ttf");
-               button2.setTypeface(typeface);
-               button3.setTypeface(typeface);
-
-
-               TextView hp = (TextView) rootView.findViewById(R.id.monster_hp);
-               TextView name = (TextView) rootView.findViewById(R.id.monster_name);
-               TextView att = (TextView) rootView.findViewById(R.id.monster_attack);
-               TextView def = (TextView) rootView.findViewById(R.id.monster_defence);
-
-               hp.setTypeface(typeface);
-               name.setTypeface(typeface);
-               att.setTypeface(typeface);
-               def.setTypeface(typeface);
-
-               catchedList = CatchedMonsterController.getInstance().getMonsterList();
-               for(Monster monster: catchedList) {
-                   if(CatchedMonsterController.getInstance().isKeyMonster(monster)) {
-                       MonsterImageView imageView = (MonsterImageView) rootView.findViewById(R.id.monster_image);
-                       imageView.mainMode(true);
-                       TypedArray array = null;
-                       switch (monster.get_tier()){
-                           case 1:
-                               array = getResources().obtainTypedArray(R.array.tier_one_monster_images);
-                               imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_1));
-                               array.recycle();
-                               break;
-                           case 2:
-                               array = getResources().obtainTypedArray(R.array.tier_two_monster_images);
-                               imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_3));
-                               array.recycle();
-                               break;
-                           case 3:
-                               array = getResources().obtainTypedArray(R.array.tier_three_monster_images);
-                               imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_10));
-                               array.recycle();
-                               break;
-                           case 4:
-                               array = getResources().obtainTypedArray(R.array.tier_four_monster_images);
-                               imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_12));
-                               array.recycle();
-                               break;
-                           case 5:
-                               array = getResources().obtainTypedArray(R.array.tier_five_monster_images);
-                               imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_19));
-                               array.recycle();
-                               break;
-                       }
-
-                       hp.setText("HP: " + Integer.toString(monster.get_health()));
-                       name.setText(monster.get_name());
-                       att.setText("Attack: " + Integer.toString(monster.get_attack()));
-                       def.setText("Defence: " + Integer.toString(monster.get_defence()));
-                   }
-               }
-
-
-               //TextView text = (TextView) rootView.findViewById(R.id.monster_list);
-               //text.setText("Fragment #: " + mPage);
-               return rootView;
 
            } else if(mPage == 2) {
                View rootView = inflater.inflate(R.layout.activity_monster_list, container, false);
-               ArrayList<Monster> array = new ArrayList<Monster>();
-               catchedList = CatchedMonsterController.getInstance().getMonsterList();
-               for(Monster monster: catchedList) {
-                   array.add(monster);
-               }
-
-               MonsterAdapter adapter;
-               adapter = new MonsterAdapter(this.getActivity(), R.layout.custom_row_monster, array);
-
-               ListView list = (ListView)rootView.findViewById(R.id.list);
-               list.setAdapter(adapter);
-
-                // //TextView text = (TextView) rootView.findViewById(R.id.qr_scan);
-               //Log.i("Main/onCreateView", rootView.getClass().toString());
-                //text.setText("Fragment #: " + mPage);
-                return rootView;
+               return getMonsterListView(rootView);
 
            } else if(mPage == 3) {
                View rootView = inflater.inflate(R.layout.activity_nfcbattle, container, false);
@@ -382,6 +304,91 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
 
             return null;
 
+        }
+
+        private View getMonsterListView(View rootView) {
+            ArrayList<Monster> array = new ArrayList<Monster>();
+            catchedList = CatchedMonsterController.getInstance().getMonsterList();
+            for(Monster monster: catchedList) {
+                array.add(monster);
+            }
+
+            MonsterAdapter adapter;
+            adapter = new MonsterAdapter(this.getActivity(), R.layout.custom_row_monster, array);
+
+            ListView list = (ListView)rootView.findViewById(R.id.list);
+            list.setAdapter(adapter);
+
+            // //TextView text = (TextView) rootView.findViewById(R.id.qr_scan);
+            //Log.i("Main/onCreateView", rootView.getClass().toString());
+            //text.setText("Fragment #: " + mPage);
+            return rootView;
+        }
+
+        private View getExploreView(View rootView) {
+            Button button2 = (Button) rootView.findViewById(R.id.change_monster);
+            Button button3 = (Button) rootView.findViewById(R.id.train_monster);
+
+            Typeface typeface = Typeface.createFromAsset(rootView.getContext().getAssets(), "Pixel Countdown.otf");
+            button2.setTypeface(typeface);
+            button3.setTypeface(typeface);
+
+
+            TextView hp = (TextView) rootView.findViewById(R.id.monster_hp);
+            TextView name = (TextView) rootView.findViewById(R.id.monster_name);
+            TextView att = (TextView) rootView.findViewById(R.id.monster_attack);
+            TextView def = (TextView) rootView.findViewById(R.id.monster_defence);
+
+            hp.setTypeface(typeface);
+            name.setTypeface(typeface);
+            att.setTypeface(typeface);
+            def.setTypeface(typeface);
+
+            catchedList = CatchedMonsterController.getInstance().getMonsterList();
+            for(Monster monster: catchedList) {
+                if(CatchedMonsterController.getInstance().isKeyMonster(monster)) {
+                    MonsterImageView imageView = (MonsterImageView) rootView.findViewById(R.id.monster_image);
+                    imageView.mainMode(true);
+                    TypedArray array = null;
+                    switch (monster.get_tier()){
+                        case 1:
+                            array = getResources().obtainTypedArray(R.array.tier_one_monster_images);
+                            imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_1));
+                            array.recycle();
+                            break;
+                        case 2:
+                            array = getResources().obtainTypedArray(R.array.tier_two_monster_images);
+                            imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_3));
+                            array.recycle();
+                            break;
+                        case 3:
+                            array = getResources().obtainTypedArray(R.array.tier_three_monster_images);
+                            imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_10));
+                            array.recycle();
+                            break;
+                        case 4:
+                            array = getResources().obtainTypedArray(R.array.tier_four_monster_images);
+                            imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_12));
+                            array.recycle();
+                            break;
+                        case 5:
+                            array = getResources().obtainTypedArray(R.array.tier_five_monster_images);
+                            imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_19));
+                            array.recycle();
+                            break;
+                    }
+
+                    hp.setText("HP: " + Integer.toString(monster.get_health()));
+                    name.setText(monster.get_name());
+                    att.setText("Attack: " + Integer.toString(monster.get_attack()));
+                    def.setText("Defence: " + Integer.toString(monster.get_defence()));
+                }
+            }
+
+
+            //TextView text = (TextView) rootView.findViewById(R.id.monster_list);
+            //text.setText("Fragment #: " + mPage);
+            return rootView;
         }
     }
 

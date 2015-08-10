@@ -13,7 +13,6 @@
     <string name="title_NFCbattle">Battle</string>
     <string name="title_activity_explore">Explore</string>
     <string name="title_activity_nfcbattle">NFCbattle</string>
-
     <string name="scan_button">Scan Button</string>
     <string name="app_picker_name">Applications</string>
     <string name="bookmark_picker_name">Bookmarks</string>
@@ -139,4 +138,8 @@
     <string name="result_wifi">Found WLAN Configuration</string>
     <string name="sbc_name">Google Book Search</string>
     <string name="wifi_changing_network">Requesting connection to network\u2026</string>
+    <string name="title_activity_catch_monster">CatchMonsterActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
 </resources>

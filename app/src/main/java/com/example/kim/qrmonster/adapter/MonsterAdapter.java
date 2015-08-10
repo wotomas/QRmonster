@@ -2,6 +2,7 @@ package com.example.kim.qrmonster.adapter;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,6 +104,7 @@ public class MonsterAdapter extends BaseAdapter {
 
         convertView.setOnClickListener(makeListener);
 
+
         TextView name = (TextView)convertView.findViewById(R.id.list_monster_name);
         name.setText(_arrayList.get(position).get_name());
         TextView attack = (TextView)convertView.findViewById(R.id.list_monster_attack);
@@ -111,6 +113,12 @@ public class MonsterAdapter extends BaseAdapter {
         defence.setText("Defence: " + Integer.toString(_arrayList.get(position).get_defence()));
         TextView hp = (TextView)convertView.findViewById(R.id.list_monster_hp);
         hp.setText("Health: " + Integer.toString(_arrayList.get(position).get_health()));
+
+        Typeface typeface = Typeface.createFromAsset(convertView.getContext().getAssets(), "Pixel Countdown.otf");
+        name.setTypeface(typeface);
+        attack.setTypeface(typeface);
+        defence.setTypeface(typeface);
+        hp.setTypeface(typeface);
 
         return convertView;
 
