@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -101,6 +102,7 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
         });
 
 
+
         // For each of the sections in the app, add a tab to the action bar.
         for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
             // Create a tab with text corresponding to the page title defined by
@@ -108,22 +110,40 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
             // the TabListener interface, as the callback (listener) for when
             // this tab is selected.
             if(mSectionsPagerAdapter.getPageTitle(i).equals("EXPLORE")) {
+                View tabView = getLayoutInflater().inflate(R.layout.custom_actionbar_tab, null);
+                TextView tabText = (TextView) tabView.findViewById(R.id.tabText);
+                tabText.setText((mSectionsPagerAdapter.getPageTitle(i)));
+
+                ImageView tabImage = (ImageView) tabView.findViewById(R.id.tabIcon);
+                tabImage.setImageDrawable(getResources().getDrawable(R.drawable.explore));
+
                 actionBar.addTab(
                         actionBar.newTab()
-                                .setIcon(R.drawable.explore)
-                                        //.setText(mSectionsPagerAdapter.getPageTitle(i))
+                                .setCustomView(tabView)
                                 .setTabListener(this));
             } else if(mSectionsPagerAdapter.getPageTitle(i).equals("LIST")) {
+                View tabView = getLayoutInflater().inflate(R.layout.custom_actionbar_tab, null);
+                TextView tabText = (TextView) tabView.findViewById(R.id.tabText);
+                tabText.setText((mSectionsPagerAdapter.getPageTitle(i)));
+
+                ImageView tabImage = (ImageView) tabView.findViewById(R.id.tabIcon);
+                tabImage.setImageDrawable(getResources().getDrawable(R.drawable.list));
+
                 actionBar.addTab(
                         actionBar.newTab()
-                                .setIcon(R.drawable.list)
-                                        //.setText(mSectionsPagerAdapter.getPageTitle(i))
+                                .setCustomView(tabView)
                                 .setTabListener(this));
             } else if(mSectionsPagerAdapter.getPageTitle(i).equals("BATTLE")) {
+                View tabView = getLayoutInflater().inflate(R.layout.custom_actionbar_tab, null);
+                TextView tabText = (TextView) tabView.findViewById(R.id.tabText);
+                tabText.setText((mSectionsPagerAdapter.getPageTitle(i)));
+
+                ImageView tabImage = (ImageView) tabView.findViewById(R.id.tabIcon);
+                tabImage.setImageDrawable(getResources().getDrawable(R.drawable.battle));
+
                 actionBar.addTab(
                         actionBar.newTab()
-                                .setIcon(R.drawable.battle)
-                                        //.setText(mSectionsPagerAdapter.getPageTitle(i))
+                                .setCustomView(tabView)
                                 .setTabListener(this));
             }
         }
