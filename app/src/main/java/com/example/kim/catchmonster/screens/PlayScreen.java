@@ -133,8 +133,8 @@ public class PlayScreen extends Screen {
 
     private List<Seed> neededSeeds = new ArrayList<Seed>(); // the list of seeds required when computing whether a combo has been hit.
 
-    private static final int COMBOHIT_SPEED = 300; // how fast the combohit message rises
-    private static final long COMBOHIT_DISPLAYTIME = (int) (0.75 * ONESEC_NANOS); // time to display a combo hit
+    private static final int COMBOHIT_SPEED = 200; // how fast the combohit message rises
+    private static final long COMBOHIT_DISPLAYTIME = (int) (0.90 * ONESEC_NANOS); // time to display a combo hit
 
     private Monster myMonster;
     private int originalLife;
@@ -316,7 +316,7 @@ public class PlayScreen extends Screen {
      * init game for current round
      */
     private void initRound() {
-        selectable_speed = (int)(INIT_SELECTABLE_SPEED * act.sizescalefactor + (monster.get_defence() * 5) + (round * 10));
+        selectable_speed = (int)(INIT_SELECTABLE_SPEED * act.sizescalefactor + (monster.get_defence() * 5) + (round * 20));
 
         //selectable_speed =
         //check my monster Tier
