@@ -1,13 +1,20 @@
 package com.example.kim.qrmonster.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -15,7 +22,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.kim.qrmonster.R;
+import com.example.kim.qrmonster.activities.Main;
 import com.example.kim.qrmonster.assets.MonsterImageView;
+import com.example.kim.qrmonster.controller.CatchedMonsterController;
 import com.example.kim.qrmonster.units.Monster;
 
 import java.util.ArrayList;
@@ -60,6 +69,8 @@ public class MonsterAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(_context).inflate(_layout, parent, false);
         }
         MonsterImageView imageView = (MonsterImageView)convertView.findViewById(R.id.list_monster_image);
+
+
         //img.setImageResource(_arrayList.get(position).get_image        ());
         //set Image
         imageView.listMode(true);
@@ -99,10 +110,30 @@ public class MonsterAdapter extends BaseAdapter {
                 Monster monster = new Monster();
                 monster = _arrayList.get(position);
                 Log.i("MonsterAdapter/makeListener Monster Name: ", monster.get_name());
+
             }
         };
 
         convertView.setOnClickListener(makeListener);
+        Button chooseButton = (Button)convertView.findViewById(R.id.choose_button);
+        if(CatchedMonsterController.getInstance().isKeyMonster(_arrayList.get(position))) {
+            RelativeLayout background = (RelativeLayout)convertView.findViewById(R.id.layout_background);
+            background.setBackgroundColor(Color.parseColor("#fffff490"));
+            chooseButton.setVisibility(View.GONE);
+        } else {
+            RelativeLayout background = (RelativeLayout)convertView.findViewById(R.id.layout_background);
+            background.setBackgroundColor(Color.parseColor("#ffffff"));
+            chooseButton.setVisibility(View.VISIBLE);
+
+            chooseButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    System.out.println("Main/setKeyMonsterOnClick: Key Monster is set to: " + _arrayList.get(position).get_name());
+                    CatchedMonsterController.getInstance().setKeyMonster(_arrayList.get(position));
+                    notifyDataSetChanged();
+                }
+            });
+        }
 
 
         TextView name = (TextView)convertView.findViewById(R.id.list_monster_name);
@@ -119,8 +150,10 @@ public class MonsterAdapter extends BaseAdapter {
         attack.setTypeface(typeface);
         defence.setTypeface(typeface);
         hp.setTypeface(typeface);
+        chooseButton.setTypeface(typeface);
 
         return convertView;
 
     }
+
 }

@@ -25,17 +25,31 @@ public class CatchedMonsterStorage implements JsonStorable {
 
 
     //set key monster
-    public void setKeyMonster(int key) {
-        for (Monster monster: monsterList) {
-            if (monster.get_key() == key) {
-                keyMonster = key;
+    public boolean setKeyMonster(Monster monster) {
+        for (Monster m: monsterList) {
+            if (m == monster) {
+                System.out.println("CatchMonsterStorage/setKeyMonster: Key Monster is set to: " + monster.get_name());
+                keyMonster = monster.get_key();
+                monster.set_iskeyMonster(true);
+                return true;
             }
         }
+        System.out.println("CatchMonsterStorage/setKeyMonster: No key Monster for :" + monster.get_name());
+        return false;
     }
 
     //get key monster
     public int getKeyMonster() {
-        return keyMonster;
+        for (Monster monster: monsterList) {
+                if(monster.get_iskeyMonster())
+                {
+                    System.out.println("CatchMonsterStorage/getKeyMonster: Key Monster is set to: " + monster.get_name());
+                    //monster.set_iskeyMonster(true);
+                    return monster.get_key();
+                }
+        }
+        System.out.println("CatchMonsterStorage/getKeyMonster: Failed to get key monster");
+        return -1;
     }
 
     //get monster from list
@@ -68,9 +82,6 @@ public class CatchedMonsterStorage implements JsonStorable {
         if (!isDuplicate(monster.get_key())) {
             monsterList.add(monster);
             monsterNumber++;
-            if(monsterNumber == 1) {
-                keyMonster = monster.get_key();
-            }
             saveToJson(context);
             return true;
         }

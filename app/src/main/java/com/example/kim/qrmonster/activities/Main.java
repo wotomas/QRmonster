@@ -1,9 +1,12 @@
 package com.example.kim.qrmonster.activities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Locale;
+import java.util.Map;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
@@ -53,6 +56,7 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
     SectionsPagerAdapter mSectionsPagerAdapter;
     final static int requestCode = 0;
     final static int trainReqeustCode = 1;
+    //final static int changeMonsterRequestCode = 2;
     private static LinkedList<Monster> catchedList = new LinkedList<Monster>();
     private static MonsterStorage monsterStorage = new MonsterStorage();
     private static QRcodeStorage QRstorage = new QRcodeStorage();
@@ -81,8 +85,11 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
 
     }
 
+
+
+
     private void setAdapter(final ActionBar actionBar) {
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), getBaseContext());
 
 
         // Set up the ViewPager with the sections adapter.
@@ -98,6 +105,25 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
             @Override
             public void onPageSelected(int position) {
                 actionBar.setSelectedNavigationItem(position);
+                Fragment fragment = ((SectionsPagerAdapter)mViewPager.getAdapter()).getFragment(position);
+
+                if(fragment != null) {
+                    fragment.onResume();
+                }
+
+
+                /**
+                FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
+                PlaceholderFragment fragment = ((PlaceholderFragment) adapter.getItem(mViewPager.getCurrentItem()));
+
+                //System.out.println("Main/onPageSelected: fragment tag is " + fragment.getTag());
+                //System.out.println("Main/onPageSelected: fragment id is " + fragment.getId());
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.detach(fragment);
+                ft.attach(fragment);
+                ft.commit();
+                System.out.println("Main/onPageSelected: currentItem is " + fragment.toString());
+                 **/
             }
         });
 
@@ -175,6 +201,7 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
         startActivityForResult(intent, trainReqeustCode);
     }
 
+
     protected void onActivityResult(int request, int result, Intent data) {
         Log.i("main/onActivityResult", "request: " + request + " result: " + result);
         switch(request) {
@@ -190,7 +217,9 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
                 if(result == 99) {
                     //Log.i("main/onActivityResult", "request: " + request + " result: " + result);
                 }
+                break;
             }
+
     }
 
 
@@ -237,9 +266,16 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+        private Map<Integer, String> mFragmentTags;
+        private FragmentManager mFragmentManager;
+        private Context mContext;
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+
+        public SectionsPagerAdapter(FragmentManager fm, Context context) {
             super(fm);
+            mFragmentManager = fm;
+            mFragmentTags = new HashMap<Integer, String>();
+            mContext = context;
         }
 
         @Override
@@ -269,6 +305,24 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
             return null;
         }
 
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            Object obj = super.instantiateItem(container, position);
+            if(obj instanceof Fragment) {
+                Fragment f = (Fragment) obj;
+                String tag = f.getTag();
+                mFragmentTags.put(position, tag);
+            }
+            return obj;
+        }
+
+        public Fragment getFragment(int position) {
+            String tag = mFragmentTags.get(position);
+            if(tag == null) {
+                return null;
+            }
+            return mFragmentManager.findFragmentByTag(tag);
+        }
     }
 
     /**
@@ -291,6 +345,7 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
+
             return fragment;
         }
 
@@ -342,15 +397,14 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
             // //TextView text = (TextView) rootView.findViewById(R.id.qr_scan);
             //Log.i("Main/onCreateView", rootView.getClass().toString());
             //text.setText("Fragment #: " + mPage);
+            rootView.setTag("list");
             return rootView;
         }
 
         private View getExploreView(View rootView) {
-            Button button2 = (Button) rootView.findViewById(R.id.change_monster);
             Button button3 = (Button) rootView.findViewById(R.id.train_monster);
 
             Typeface typeface = Typeface.createFromAsset(rootView.getContext().getAssets(), "Pixel Countdown.otf");
-            button2.setTypeface(typeface);
             button3.setTypeface(typeface);
 
 
@@ -408,8 +462,11 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
 
             //TextView text = (TextView) rootView.findViewById(R.id.monster_list);
             //text.setText("Fragment #: " + mPage);
+            rootView.setTag("explore");
             return rootView;
         }
+
     }
+
 
 }

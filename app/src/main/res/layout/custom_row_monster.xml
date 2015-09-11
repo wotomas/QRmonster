@@ -2,6 +2,7 @@
     android:layout_height="wrap_content"
     android:layout_width="wrap_content"
     android:padding="4dip"
+    android:id="@+id/layout_background"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:clickable="false">
 
@@ -17,6 +18,7 @@
 
     <LinearLayout
         android:orientation="vertical"
+        android:id="@+id/list_monster_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -51,4 +53,27 @@
             android:text="Health Point: 0"
             android:id="@+id/list_monster_hp" />
     </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose!"
+            android:id="@+id/choose_button"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button_layout"
+            android:textColor="#ffffffff" />
+
+        </LinearLayout>
+
+
 </RelativeLayout>

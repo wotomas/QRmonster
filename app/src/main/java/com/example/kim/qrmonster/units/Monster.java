@@ -19,6 +19,7 @@ public class Monster {
     private int _defence;
     private int _health;
     private int _tier;
+    private boolean _iskeyMonster;
 
     public Monster() {
         _key = 0;
@@ -28,6 +29,7 @@ public class Monster {
         _defence = 0;
         _health = 0;
         _tier = 0;
+        _iskeyMonster = false;
     }
 
     public Monster(String name) {
@@ -38,6 +40,7 @@ public class Monster {
         _defence = 0;
         _health = 0;
         _tier = 0;
+        _iskeyMonster = false;
     }
 
 
@@ -95,6 +98,14 @@ public class Monster {
 
     public void set_health(int _health) {
         this._health = _health;
+    }
+
+    public boolean get_iskeyMonster() {
+        return _iskeyMonster;
+    }
+
+    public void set_iskeyMonster(boolean _iskeyMonster) {
+        this._iskeyMonster = _iskeyMonster;
     }
 
     @Override

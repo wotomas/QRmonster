@@ -52,7 +52,7 @@ public class CatchedMonsterController {
     }
 
     public boolean addMonster(Monster monster,  Context context){
-        if(Math.random() < 0.7) {
+        if(Math.random() < 0.9) {
             return mMonsterStorage.addMonster(monster, context);
         }
         return false;
@@ -77,5 +77,14 @@ public class CatchedMonsterController {
 
     public Monster getKeyMonster() {
         return mMonsterStorage.getMonster(mMonsterStorage.getKeyMonster());
+    }
+
+    public boolean setKeyMonster(Monster monster) {
+        if(mMonsterStorage.setKeyMonster(monster)) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }
