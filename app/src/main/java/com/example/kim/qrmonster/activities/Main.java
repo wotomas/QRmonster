@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -105,25 +106,79 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
             @Override
             public void onPageSelected(int position) {
                 actionBar.setSelectedNavigationItem(position);
-                Fragment fragment = ((SectionsPagerAdapter)mViewPager.getAdapter()).getFragment(position);
+                Log.d("Frag Pos: ", Integer.toString(position));
+                /**
 
-                if(fragment != null) {
-                    fragment.onResume();
+
+                if(firstFragment != null) {
+                    firstFragment.onResume();
+                } else {
+                    Log.d("Fragment is : ","Null!");
+                }
+                 **/
+
+                //Fragment fragment = ((SectionsPagerAdapter)mViewPager.getAdapter()).getFragment(position);
+
+                //change explore view
+
+                if(position == 0) {
+                    Button button3 = (Button) findViewById(R.id.train_monster);
+                    TextView hp = (TextView) findViewById(R.id.monster_hp);
+                    TextView name = (TextView) findViewById(R.id.monster_name);
+                    TextView att = (TextView) findViewById(R.id.monster_attack);
+                    TextView def = (TextView) findViewById(R.id.monster_defence);
+
+                    catchedList = CatchedMonsterController.getInstance().getMonsterList();
+                    for(Monster monster: catchedList) {
+                        if(CatchedMonsterController.getInstance().isKeyMonster(monster)) {
+                            MonsterImageView imageView = (MonsterImageView) findViewById(R.id.monster_image);
+                            imageView.mainMode(true);
+                            TypedArray array = null;
+                            switch (monster.get_tier()){
+                                case 1:
+                                    array = getResources().obtainTypedArray(R.array.tier_one_monster_images);
+                                    imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_1));
+                                    array.recycle();
+                                    break;
+                                case 2:
+                                    array = getResources().obtainTypedArray(R.array.tier_two_monster_images);
+                                    imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_3));
+                                    array.recycle();
+                                    break;
+                                case 3:
+                                    array = getResources().obtainTypedArray(R.array.tier_three_monster_images);
+                                    imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_10));
+                                    array.recycle();
+                                    break;
+                                case 4:
+                                    array = getResources().obtainTypedArray(R.array.tier_four_monster_images);
+                                    imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_12));
+                                    array.recycle();
+                                    break;
+                                case 5:
+                                    array = getResources().obtainTypedArray(R.array.tier_five_monster_images);
+                                    imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_19));
+                                    array.recycle();
+                                    break;
+                            }
+
+                            hp.setText("HP: " + Integer.toString(monster.get_health()));
+                            name.setText(monster.get_name());
+                            att.setText("Attack: " + Integer.toString(monster.get_attack()));
+                            def.setText("Defence: " + Integer.toString(monster.get_defence()));
+                        }
+                    }
                 }
 
 
-                /**
-                FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
-                PlaceholderFragment fragment = ((PlaceholderFragment) adapter.getItem(mViewPager.getCurrentItem()));
-
-                //System.out.println("Main/onPageSelected: fragment tag is " + fragment.getTag());
-                //System.out.println("Main/onPageSelected: fragment id is " + fragment.getId());
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                ft.detach(fragment);
-                ft.attach(fragment);
-                ft.commit();
-                System.out.println("Main/onPageSelected: currentItem is " + fragment.toString());
-                 **/
+                  /**
+                if(fragment != null) {
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    ft.detach(fragment);
+                    ft.attach(fragment);
+                    ft.commit();
+                }
+                   **/
             }
         });
 
@@ -265,7 +320,7 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         private Map<Integer, String> mFragmentTags;
         private FragmentManager mFragmentManager;
         private Context mContext;
@@ -321,6 +376,7 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
             if(tag == null) {
                 return null;
             }
+            Log.d("Fragment Tag: ", tag);
             return mFragmentManager.findFragmentByTag(tag);
         }
     }

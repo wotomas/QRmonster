@@ -141,5 +141,6 @@
     <string name="title_activity_catch_monster">CatchMonsterActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
