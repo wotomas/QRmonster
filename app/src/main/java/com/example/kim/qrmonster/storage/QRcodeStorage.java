@@ -29,6 +29,7 @@ public class QRcodeStorage implements JsonStorable {
     //initialize
     public QRcodeStorage() {
         QRcodeList = new LinkedList<QRcode>();
+        QRcodeNumber = 0;
     }
 
     //get QRcodeList
