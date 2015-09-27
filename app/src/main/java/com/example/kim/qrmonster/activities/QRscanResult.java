@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.kim.catchmonster.activities.MainActivity;
@@ -27,6 +28,7 @@ import com.example.kim.qrmonster.units.QRcode;
 
 public class QRscanResult extends ActionBarActivity {
     private Monster monster;
+    private RatingBar ratingBar;
 
     final static int requestCode = 0;
     final static int fightReqeustCode = 2;
@@ -49,15 +51,46 @@ public class QRscanResult extends ActionBarActivity {
         qr.set_content(contents);
         qr.set_monsterKey(MonsterController.getInstance().getNextKey());
 
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         if(QRcodeController.getInstance().addQRcode(qr, this)){
             meetMonster(contents);
         } else {
             //duplicate QR code so output message!
             TextView text = (TextView) findViewById(R.id.title_text);
-            text.setText("Duplicate QR code!");
+            text.setText("Can Not Catch the Same Monster Twice!");
+
             CardView card = (CardView) findViewById(R.id.card_view);
             card.setVisibility(View.INVISIBLE);
-            Log.i("onCreate", "Could not add QR to the list");
+            final LinearLayout linear = (LinearLayout) View.inflate(this, R.layout.monster_name_alert, null);
+
+            EditText editText = (EditText) linear.findViewById(R.id.monster_new_name);
+            editText.setVisibility(View.GONE);
+            TextView textView = (TextView) linear.findViewById(R.id.monster_instruct_text);
+            textView.setText("Can not Catch the Same Monster Twice!");
+
+            ratingBar.setVisibility(View.INVISIBLE);
+
+            new AlertDialog.Builder(this)
+                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            //do whatever you want the back key to do
+                            Log.i("runFromMonster", "Duplicate QR code!");
+                            setResult(RESULT_CANCELED);
+                            finish();
+                        }
+                    })
+                    .setTitle("Same Monster!")
+                    .setIcon(R.drawable.launcher_icon)
+                    .setView(linear)
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.i("runFromMonster", "Can Not Catch Same Monster Twice!");
+                            setResult(RESULT_CANCELED);
+                            finish();
+                        }
+                    }).show();
         }
 
 
@@ -71,7 +104,9 @@ public class QRscanResult extends ActionBarActivity {
         monster = new Monster();
         monster = MonsterController.getInstance().createRandomMonster(contents);
 
+        ratingBar.setRating(monster.get_tier());
         MonsterImageView imageView = (MonsterImageView) findViewById(R.id.monster_view);
+
         TypedArray array = null;
         switch (monster.get_tier()){
             case 1:
@@ -194,7 +229,12 @@ public class QRscanResult extends ActionBarActivity {
                     //catch success
 
                     if(CatchedMonsterController.getInstance().addMonster(monster, this)) {
+                        if(CatchedMonsterController.getInstance().getKeyMonster() == null) {
+                            CatchedMonsterController.getInstance().setKeyMonster(monster);
+                        }
                         final LinearLayout linear = (LinearLayout) View.inflate(this, R.layout.monster_name_alert, null);
+                        TextView textView = (TextView) linear.findViewById(R.id.monster_instruct_text);
+                        textView.setText("You Successfully Caught the Monster!");
 
                         new AlertDialog.Builder(this)
                                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -206,15 +246,14 @@ public class QRscanResult extends ActionBarActivity {
                                         finish();
                                     }
                                 })
-                                .setTitle("You Caught a new QRmonster!")
+                                .setTitle("You Caught a new Monster!")
                                 .setIcon(R.drawable.launcher_icon)
                                 .setView(linear)
                                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         EditText newName = (EditText)linear.findViewById(R.id.monster_new_name);
-                                        Monster newMonster = new Monster();
-                                        newMonster = monster;
+                                        Monster newMonster = monster;
                                         newMonster.set_name(newName.getText().toString());
                                         CatchedMonsterController.getInstance().updateMonster(monster.get_key(), newMonster, getBaseContext());
                                         Log.i("catchMonster", "Catch Monster!");
