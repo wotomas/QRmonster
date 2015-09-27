@@ -10,6 +10,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
+import android.nfc.NfcAdapter;
+import android.provider.Settings;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -19,6 +21,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,7 +31,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kim.catchmonster.activities.MainActivity;
 import com.example.kim.qrmonster.R;
@@ -122,63 +127,92 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
                 //change explore view
 
                 if(position == 0) {
+                    Monster myMonster = CatchedMonsterController.getInstance().getKeyMonster();
+
                     Button button3 = (Button) findViewById(R.id.train_monster);
                     TextView hp = (TextView) findViewById(R.id.monster_hp);
                     TextView name = (TextView) findViewById(R.id.monster_name);
                     TextView att = (TextView) findViewById(R.id.monster_attack);
                     TextView def = (TextView) findViewById(R.id.monster_defence);
+                    TextView instruction = (TextView) findViewById(R.id.instruction);
+                    TextView lev = (TextView) findViewById(R.id.monster_level);
+                    ProgressBar expBar = (ProgressBar) findViewById(R.id.experienceBar);
+                    TextView expText = (TextView) findViewById(R.id.monster_exp_text);
 
-                    catchedList = CatchedMonsterController.getInstance().getMonsterList();
-                    for(Monster monster: catchedList) {
-                        if(CatchedMonsterController.getInstance().isKeyMonster(monster)) {
-                            MonsterImageView imageView = (MonsterImageView) findViewById(R.id.monster_image);
-                            imageView.mainMode(true);
-                            TypedArray array = null;
-                            switch (monster.get_tier()){
-                                case 1:
-                                    array = getResources().obtainTypedArray(R.array.tier_one_monster_images);
-                                    imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_1));
-                                    array.recycle();
-                                    break;
-                                case 2:
-                                    array = getResources().obtainTypedArray(R.array.tier_two_monster_images);
-                                    imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_3));
-                                    array.recycle();
-                                    break;
-                                case 3:
-                                    array = getResources().obtainTypedArray(R.array.tier_three_monster_images);
-                                    imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_10));
-                                    array.recycle();
-                                    break;
-                                case 4:
-                                    array = getResources().obtainTypedArray(R.array.tier_four_monster_images);
-                                    imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_12));
-                                    array.recycle();
-                                    break;
-                                case 5:
-                                    array = getResources().obtainTypedArray(R.array.tier_five_monster_images);
-                                    imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_19));
-                                    array.recycle();
-                                    break;
+                    if(myMonster == null) {
+                        button3.setVisibility(View.GONE);
+                        hp.setVisibility(View.GONE);
+                        name.setVisibility(View.GONE);
+                        att.setVisibility(View.GONE);
+                        def.setVisibility(View.GONE);
+                        lev.setVisibility(View.GONE);
+                        expBar.setVisibility(View.GONE);
+                        expText.setVisibility(View.GONE);
+                    } else {
+
+                        button3.setVisibility(View.VISIBLE);
+                        hp.setVisibility(View.VISIBLE);
+                        name.setVisibility(View.VISIBLE);
+                        att.setVisibility(View.VISIBLE);
+                        def.setVisibility(View.VISIBLE);
+                        lev.setVisibility(View.VISIBLE);
+                        expBar.setVisibility(View.VISIBLE);
+                        expText.setVisibility(View.VISIBLE);
+
+                        instruction.setVisibility(View.GONE);
+
+                        expBar.setProgress(CatchedMonsterController.getInstance().getKeyMonster().get_experience());
+                        expBar.setMax(CatchedMonsterController.getInstance().getKeyMonster().get_maxExperience());
+
+                        catchedList = CatchedMonsterController.getInstance().getMonsterList();
+                        for(Monster monster: catchedList) {
+                            if (CatchedMonsterController.getInstance().isKeyMonster(monster)) {
+                                MonsterImageView imageView = (MonsterImageView) findViewById(R.id.monster_image);
+                                imageView.mainMode(true);
+                                TypedArray array = null;
+                                switch (monster.get_tier()) {
+                                    case 1:
+                                        array = getResources().obtainTypedArray(R.array.tier_one_monster_images);
+                                        imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_1));
+                                        array.recycle();
+                                        break;
+                                    case 2:
+                                        array = getResources().obtainTypedArray(R.array.tier_two_monster_images);
+                                        imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_3));
+                                        array.recycle();
+                                        break;
+                                    case 3:
+                                        array = getResources().obtainTypedArray(R.array.tier_three_monster_images);
+                                        imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_10));
+                                        array.recycle();
+                                        break;
+                                    case 4:
+                                        array = getResources().obtainTypedArray(R.array.tier_four_monster_images);
+                                        imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_12));
+                                        array.recycle();
+                                        break;
+                                    case 5:
+                                        array = getResources().obtainTypedArray(R.array.tier_five_monster_images);
+                                        imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_19));
+                                        array.recycle();
+                                        break;
+                                }
+                                //Html.fromHtml("Your big island <b>ADVENTURE!</b>")
+                                hp.setText("HP: " + Integer.toString(monster.get_health()) + "  +" +Integer.toString(monster.get_extraHealth()));
+                                name.setText(monster.get_name());
+                                att.setText("Atk: " + Integer.toString(monster.get_attack()) + "  +" +Integer.toString(monster.get_extraAttack()));
+                                def.setText("Def: " + Integer.toString(monster.get_defence())  + "  +" +Integer.toString(monster.get_extraDefence()));
+                                lev.setText("Lev: " + Integer.toString(monster.get_level()));
                             }
-
-                            hp.setText("HP: " + Integer.toString(monster.get_health()));
-                            name.setText(monster.get_name());
-                            att.setText("Attack: " + Integer.toString(monster.get_attack()));
-                            def.setText("Defence: " + Integer.toString(monster.get_defence()));
                         }
+
                     }
+
+                } else if(position == 2) {
+                    //for testing
+                    CatchedMonsterController.getInstance().gainExperience(CatchedMonsterController.getInstance().getKeyMonster());
                 }
 
-
-                  /**
-                if(fragment != null) {
-                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    ft.detach(fragment);
-                    ft.attach(fragment);
-                    ft.commit();
-                }
-                   **/
             }
         });
 
@@ -252,6 +286,7 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
     public void trainOnClick(View view) {
         //open QR scan activity
         Intent intent = new Intent(this, MainActivity.class);
+        MonsterController.getInstance().createRandomMonster("Random Monster");
         //startActivity(intent);
         startActivityForResult(intent, trainReqeustCode);
     }
@@ -271,6 +306,11 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
             case trainReqeustCode:
                 if(result == 99) {
                     //Log.i("main/onActivityResult", "request: " + request + " result: " + result);
+                    CatchedMonsterController.getInstance().gainExperience(CatchedMonsterController.getInstance().getKeyMonster());
+
+                    ProgressBar expBar = (ProgressBar) findViewById(R.id.experienceBar);
+                    expBar.setProgress(CatchedMonsterController.getInstance().getKeyMonster().get_experience());
+                    expBar.setMax(CatchedMonsterController.getInstance().getKeyMonster().get_maxExperience());
                 }
                 break;
             }
@@ -430,11 +470,55 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
                View rootView = inflater.inflate(R.layout.activity_nfcbattle, container, false);
                //TextView text = (TextView) rootView.findViewById(R.id.monster_list);
                //text.setText("Fragment #: " + mPage);
-               return rootView;
+               return getNFCview(rootView);
            }
 
             return null;
 
+        }
+
+        private View getNFCview(View rootView) {
+            Typeface typeface = Typeface.createFromAsset(rootView.getContext().getAssets(), "Pixel Countdown.otf");
+
+
+            TextView textView = (TextView) rootView.findViewById(R.id.nfc_text);
+            textView.setTypeface(typeface);
+
+            NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(rootView.getContext());
+
+            if (nfcAdapter == null) {
+                //Toast.makeText(this, "This device doesn't support NFC.", Toast.LENGTH_LONG).show();
+                Log.d("NFC Adapter", "is Null");
+                textView.setText("NFC Adapter is Null");
+
+            }
+            if (!nfcAdapter.isEnabled()) {
+                //mTextView.setText("NFC is disabled.");
+                Log.d("NFC", "Is Disabled");
+                textView.setText("NFC Adapter is Disabled");
+                Toast.makeText(rootView.getContext(), "Please enable NFC.",
+                        Toast.LENGTH_SHORT).show();
+                //Ask to open NFC setting
+                Intent setnfc = new Intent(Settings.ACTION_NFC_SETTINGS);
+                startActivity(setnfc);
+            } else if(!nfcAdapter.isNdefPushEnabled()) {
+                //mTextView.setText("NFC is disabled.");
+                Log.d("NFC", "Android Beam Disabled");
+                textView.setText("NFC Android Beamr is Disabled");
+                Toast.makeText(rootView.getContext(), "Please enable Android Beam.",
+                        Toast.LENGTH_SHORT).show();
+                //Ask to open NFC setting
+                Intent setnfc = new Intent(Settings.ACTION_NFCSHARING_SETTINGS);
+                startActivity(setnfc);
+            } else {
+                //mTextView.setText("NFC is ready to be run");
+                Log.d("NFC", "Is Ready to Run!");
+                textView.setText("NFC Adapter is Ready to Run");
+
+
+            }
+
+            return rootView;
         }
 
         private View getMonsterListView(View rootView) {
@@ -463,57 +547,100 @@ public class Main extends ActionBarActivity implements ActionBar.TabListener {
             Typeface typeface = Typeface.createFromAsset(rootView.getContext().getAssets(), "Pixel Countdown.otf");
             button3.setTypeface(typeface);
 
+            Monster myMonster = CatchedMonsterController.getInstance().getKeyMonster();
+
+
 
             TextView hp = (TextView) rootView.findViewById(R.id.monster_hp);
             TextView name = (TextView) rootView.findViewById(R.id.monster_name);
             TextView att = (TextView) rootView.findViewById(R.id.monster_attack);
             TextView def = (TextView) rootView.findViewById(R.id.monster_defence);
+            TextView instruction = (TextView) rootView.findViewById(R.id.instruction);
+            TextView lev = (TextView) rootView.findViewById(R.id.monster_level);
+            ProgressBar expBar = (ProgressBar) rootView.findViewById(R.id.experienceBar);
+
+            TextView expText = (TextView) rootView.findViewById(R.id.monster_exp_text);
 
             hp.setTypeface(typeface);
             name.setTypeface(typeface);
             att.setTypeface(typeface);
             def.setTypeface(typeface);
+            instruction.setTypeface(typeface);
+            lev.setTypeface(typeface);
+            expText.setTypeface(typeface);
 
-            catchedList = CatchedMonsterController.getInstance().getMonsterList();
-            for(Monster monster: catchedList) {
-                if(CatchedMonsterController.getInstance().isKeyMonster(monster)) {
-                    MonsterImageView imageView = (MonsterImageView) rootView.findViewById(R.id.monster_image);
-                    imageView.mainMode(true);
-                    TypedArray array = null;
-                    switch (monster.get_tier()){
-                        case 1:
-                            array = getResources().obtainTypedArray(R.array.tier_one_monster_images);
-                            imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_1));
-                            array.recycle();
-                            break;
-                        case 2:
-                            array = getResources().obtainTypedArray(R.array.tier_two_monster_images);
-                            imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_3));
-                            array.recycle();
-                            break;
-                        case 3:
-                            array = getResources().obtainTypedArray(R.array.tier_three_monster_images);
-                            imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_10));
-                            array.recycle();
-                            break;
-                        case 4:
-                            array = getResources().obtainTypedArray(R.array.tier_four_monster_images);
-                            imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_12));
-                            array.recycle();
-                            break;
-                        case 5:
-                            array = getResources().obtainTypedArray(R.array.tier_five_monster_images);
-                            imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_19));
-                            array.recycle();
-                            break;
+            if(myMonster == null) {
+                button3.setVisibility(View.GONE);
+                hp.setVisibility(View.GONE);
+                name.setVisibility(View.GONE);
+                att.setVisibility(View.GONE);
+                def.setVisibility(View.GONE);
+
+                lev.setVisibility(View.GONE);
+                expBar.setVisibility(View.GONE);
+                expText.setVisibility(View.GONE);
+            } else {
+
+                instruction.setVisibility(View.GONE);
+
+                button3.setVisibility(View.VISIBLE);
+                hp.setVisibility(View.VISIBLE);
+                name.setVisibility(View.VISIBLE);
+                att.setVisibility(View.VISIBLE);
+                def.setVisibility(View.VISIBLE);
+
+                lev.setVisibility(View.VISIBLE);
+                expBar.setVisibility(View.VISIBLE);
+                expText.setVisibility(View.VISIBLE);
+
+                expBar.setProgress(CatchedMonsterController.getInstance().getKeyMonster().get_experience());
+                expBar.setMax(CatchedMonsterController.getInstance().getKeyMonster().get_maxExperience());
+
+                catchedList = CatchedMonsterController.getInstance().getMonsterList();
+                for(Monster monster: catchedList) {
+                    if(CatchedMonsterController.getInstance().isKeyMonster(monster)) {
+                        MonsterImageView imageView = (MonsterImageView) rootView.findViewById(R.id.monster_image);
+                        imageView.mainMode(true);
+                        TypedArray array = null;
+                        switch (monster.get_tier()){
+                            case 1:
+                                array = getResources().obtainTypedArray(R.array.tier_one_monster_images);
+                                imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_1));
+                                array.recycle();
+                                break;
+                            case 2:
+                                array = getResources().obtainTypedArray(R.array.tier_two_monster_images);
+                                imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_3));
+                                array.recycle();
+                                break;
+                            case 3:
+                                array = getResources().obtainTypedArray(R.array.tier_three_monster_images);
+                                imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_10));
+                                array.recycle();
+                                break;
+                            case 4:
+                                array = getResources().obtainTypedArray(R.array.tier_four_monster_images);
+                                imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_12));
+                                array.recycle();
+                                break;
+                            case 5:
+                                array = getResources().obtainTypedArray(R.array.tier_five_monster_images);
+                                imageView.setImageResource(array.getResourceId(monster.get_image(), R.drawable.monster_19));
+                                array.recycle();
+                                break;
+                        }
+
+                        //Html.fromHtml("Your big island <b>ADVENTURE!</b>")
+                        hp.setText("HP: " + Integer.toString(monster.get_health()) + "  +" +Integer.toString(monster.get_extraHealth()));
+                        name.setText(monster.get_name());
+                        att.setText("Atk: " + Integer.toString(monster.get_attack()) + "  +" +Integer.toString(monster.get_extraAttack()));
+                        def.setText("Def: " + Integer.toString(monster.get_defence())  + "  +" +Integer.toString(monster.get_extraDefence()));
+                        lev.setText("Lev: " + Integer.toString(monster.get_level()));
                     }
-
-                    hp.setText("HP: " + Integer.toString(monster.get_health()));
-                    name.setText(monster.get_name());
-                    att.setText("Attack: " + Integer.toString(monster.get_attack()));
-                    def.setText("Defence: " + Integer.toString(monster.get_defence()));
                 }
             }
+
+
 
 
             //TextView text = (TextView) rootView.findViewById(R.id.monster_list);
