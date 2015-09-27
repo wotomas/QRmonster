@@ -7,7 +7,11 @@
     android:tag="battle"
     tools:context="com.example.kim.qrmonster.activities.NFCbattle">
 
-    <TextView android:text="@string/title_NFCbattle" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <TextView
+        android:text="@string/title_NFCbattle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/nfc_text"/>
 
 </RelativeLayout>

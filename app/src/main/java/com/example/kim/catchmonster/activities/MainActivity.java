@@ -84,6 +84,7 @@ public class MainActivity extends ActionBarActivity {
 
             //initialize monster
             Monster monster = MonsterController.getInstance().getLastMetMonster();
+            //monster = MonsterController.getInstance().createRandomMonster("Random Monster");
             Monster myMonster = CatchedMonsterController.getInstance().getKeyMonster();
             //temp function for debugging
             if(myMonster == null) {
@@ -122,7 +123,6 @@ public class MainActivity extends ActionBarActivity {
     BitmapFactory.Options sboptions = new BitmapFactory.Options();
     /**
      * load and scale bitmap according to the apps scale factors.
-     *
      * @param fname
      * @return
      */

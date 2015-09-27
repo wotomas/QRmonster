@@ -1,21 +1,32 @@
 package com.example.kim.qrmonster.activities;
 
+import android.content.Intent;
+import android.nfc.NfcAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kim.qrmonster.R;
 
 
 public class NFCbattle extends ActionBarActivity {
+    public static final String TAG = "Nfc";
+
+    private TextView mTextView;
+    private NfcAdapter mNfcAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfcbattle);
     }
-
+    private void handleIntent(Intent intent) {
+        // TODO: handle Intent
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
