@@ -88,6 +88,8 @@ public class MonsterStorage implements JsonStorable {
                     monster.set_health(after.get_health());
                     monster.set_attack(after.get_attack());
                     monster.set_defence(after.get_defence());
+                    monster.set_level(after.get_level());
+                    monster.set_experience(after.get_experience());
                     saveToJson(context);
                     return true;
                 }

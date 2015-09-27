@@ -85,6 +85,13 @@ public class CatchedMonsterController {
         } else {
             return false;
         }
+    }
 
+    public boolean gainExperience(Monster monster) {
+        if(mMonsterStorage.gainExperience(monster)){
+            return true;
+        } else {
+            return false;
+        }
     }
 }
